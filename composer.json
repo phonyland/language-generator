@@ -1,0 +1,48 @@
+{
+    "name": "phonyland/language-generator",
+    "description": " \uD83D\uDCE6 Language Generator for \uD83D\uDE43 Phony Framework",
+    "homepage": "http://phony.land",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yunus Emre Deligöz",
+            "email": "ye@deligoz.me"
+        }
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phonyland\\LanguageGenerator\\": "src/"
+        }
+    },
+    "require-dev": {
+
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phonyland\\LanguageGenerator\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "lint": "php-cs-fixer fix -v",
+        "process": "rector process src",
+        "test:lint": "php-cs-fixer fix -v --dry-run",
+        "test:process": "rector process src --dry-run",
+        "test:types": "phpstan analyse --ansi --memory-limit=-1",
+        "test:unit": "pest --colors=always",
+        "test": [
+            "@test:lint",
+            "@test:process",
+            "@test:types",
+            "@test:unit"
+        ]
+    }
+}
