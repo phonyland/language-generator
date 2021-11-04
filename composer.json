@@ -16,7 +16,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.0"
+        "php": "^8.0",
+        "phonyland/language-model": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -24,7 +25,7 @@
         }
     },
     "require-dev": {
-
+        "phonyland/dev-tools": "dev-master"
     },
     "autoload-dev": {
         "psr-4": {
