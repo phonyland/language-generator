@@ -50,10 +50,10 @@ class Generator
         }
 
         if ($position === 0) {
-            throw new RuntimeException("Position can not be zero.");
+            throw new RuntimeException('Position can not be zero.');
         }
 
-        if ($firstNgram !== null && !isset($this->model->elements[$firstNgram])) {
+        if ($firstNgram !== null && ! isset($this->model->elements[$firstNgram])) {
             return null;
         }
 
@@ -89,10 +89,8 @@ class Generator
         return $word;
     }
 
-
     public function sentence($nbWords = 6, $variableNbWords = true): string
     {
         // exclude previously generated words
-
     }
 }
