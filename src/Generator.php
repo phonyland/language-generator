@@ -16,30 +16,6 @@ class Generator
         $this->model = $model;
     }
 
-    public function wordFromStartOfSentence(
-        $lengthHint,
-        int $positionFromStart,
-        ?string $firstNgram = null,
-    ): ?string {
-        return $this->word(
-            lengthHint: $lengthHint,
-            position:   $positionFromStart,
-            firstNgram: $firstNgram
-        );
-    }
-
-    public function wordFromEndOfSentence(
-        $lengthHint,
-        int $positionFromEnd,
-        ?string $firstNgram = null,
-    ): ?string {
-        return $this->word(
-            lengthHint: $lengthHint,
-            position:   $positionFromEnd * -1,
-            firstNgram: $firstNgram
-        );
-    }
-
     public function word(
         int $lengthHint,
         ?int $position = null,
@@ -87,6 +63,30 @@ class Generator
         }
 
         return $word;
+    }
+
+    public function wordFromStartOfSentence(
+        $lengthHint,
+        int $positionFromStart,
+        ?string $firstNgram = null,
+    ): ?string {
+        return $this->word(
+            lengthHint: $lengthHint,
+            position:   $positionFromStart,
+            firstNgram: $firstNgram
+        );
+    }
+
+    public function wordFromEndOfSentence(
+        $lengthHint,
+        int $positionFromEnd,
+        ?string $firstNgram = null,
+    ): ?string {
+        return $this->word(
+            lengthHint: $lengthHint,
+            position:   $positionFromEnd * -1,
+            firstNgram: $firstNgram
+        );
     }
 
     public function sentence($nbWords = 6, $variableNbWords = true): string

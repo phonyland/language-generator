@@ -2,80 +2,132 @@
 
 declare(strict_types=1);
 
-use Phonyland\LanguageGenerator\Generator;
 use Phonyland\LanguageModel\Model;
+use Phonyland\NGram\Tokenizer;
 use Phonyland\NGram\TokenizerFilter;
+use Phonyland\LanguageGenerator\Generator;
+use PHPUnit\Framework\TestCase;
 
-uses()->beforeEach(function () {
-    $model = new Model('Test Model');
+class GeneratorTest extends TestCase
+{
+    protected static ?Model $model = null;
 
-    $model->config->n(3)
-                  ->minLenght(3)
-                  ->unique(false)
-                  ->excludeOriginals(false)
-                  ->frequencyPrecision(7)
-                  ->numberOfSentenceElements(5)
-                  ->tokenizer
-                      ->addWordSeparatorPattern(TokenizerFilter::WHITESPACE_SEPARATOR)
-                      ->addWordFilterRule(TokenizerFilter::ALPHABETICAL)
-                      ->addSentenceSeparatorPattern(['.', '?', '!', ':', ';', '\n'])
-                      ->toLowercase();
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
 
-    $data = file_get_contents(getcwd().'/tests/stubs/alice.txt');
+        if (static::$model === null) {
+            $model = new Model('Test Model');
+            $model->config
+                ->n(3)
+                ->minLenght(3)
+                ->unique(false)
+                ->excludeOriginals(true)
+                ->frequencyPrecision(7)
+                ->numberOfSentenceElements(3)
+                ->tokenizer((new Tokenizer())
+                    ->addWordSeparatorPattern(TokenizerFilter::WHITESPACE_SEPARATOR)
+                    ->addWordFilterRule(TokenizerFilter::LATIN_EXTENDED_ALPHABETICAL)
+                    ->addSentenceSeparatorPattern(['.', '?', '!', ':', ';', '\n'])
+                    ->toLowercase()
+                );
 
-    $model->feed($data);
-    $model->calculate();
+            $data = file_get_contents(getcwd().'/tests/stubs/alice.txt');
 
-    $this->model = $model;
-});
+            $model->feed($data);
+            $model->calculate();
 
-it('Generator: word()', function (): void {
-    $generator = new Generator($this->model);
+            static::$model = $model;
+        }
+    }
 
-    $word = $generator->word(lengthHint: random_int(3, 10));
+    /** @test */
+    public function first_ngram_lenght_must_equal_to_n(): void
+    {
+        $generator = new Generator(static::$model);
 
-    expect($word)->toBeString();
-});
+        $this->expectException(RuntimeException::class);
 
-it('Generator: word(lengthHint)', function (): void {
-    $generator = new Generator($this->model);
+        $generator->word(
+            lengthHint: 5,
+            firstNgram: 'aaaaaaaaaa'
+        );
+    }
 
-    $word = $generator->word(lengthHint: 5);
+    /** @test */
+    public function word_position_can_not_be_zero(): void
+    {
+        $generator = new Generator(static::$model);
 
-    expect(mb_strlen($word))
-        ->toBeGreaterThanOrEqual(3)
-        ->toBeLessThanOrEqual(10);
-});
+        $this->expectException(RuntimeException::class);
 
-it('Generator: word(firstNgram)', function (): void {
-    $generator = new Generator($this->model);
+        $generator->word(
+            lengthHint: 5,
+            position: 0
+        );
+    }
 
-    $word = $generator->word(
-        lengthHint: 5,
-        firstNgram: 'goo'
-    );
+    /** @test */
+    public function word_returns_null_for_a_non_existing_first_ngram(): void
+    {
+        $generator = new Generator(static::$model);
 
-    expect($word)->toStartWith('goo');
-});
+        $this->expectException(RuntimeException::class);
 
-it('Generator: wordFromStartOfSentence()', function (): void {
-    $generator = new Generator($this->model);
+        $word = $generator->word(
+            lengthHint: 5,
+            firstNgram: 'non-existing-ngram'
+        );
 
-    $word = $generator->wordFromStartOfSentence(
-        lengthHint: 5,
-        positionFromStart: 1
-    );
+        expect($word)->toBeNull();
+    }
 
-    expect($word)->toBeString();
-});
+    /** @test */
+    public function word_with_lengthHint(): void
+    {
+        $generator = new Generator(static::$model);
 
-it('Generator: wordFromEndOfSentence()', function (): void {
-    $generator = new Generator($this->model);
+        $word = $generator->word(lengthHint: 3);
 
-    $word = $generator->wordFromEndOfSentence(
-        lengthHint: 5,
-        positionFromEnd: 1
-    );
+        expect(mb_strlen($word))->toBeGreaterThanOrEqual(3);
+    }
 
-    expect($word)->toBeString();
-});
+    /** @test */
+    public function word_firstNgram(): void
+    {
+        $generator = new Generator(static::$model);
+
+        $word = $generator->word(
+            lengthHint: 5,
+            firstNgram: 'goo'
+        );
+
+        expect($word)->toStartWith('goo');
+    }
+
+    /** @test */
+    public function wordFromStartOfSentence(): void
+    {
+        $generator = new Generator(static::$model);
+
+        $word = $generator->wordFromStartOfSentence(
+            lengthHint: 5,
+            positionFromStart: 1
+        );
+
+        expect($word)->toBeString();
+    }
+
+    /** @test */
+    public function wordFromEndOfSentence(): void
+    {
+        $generator = new Generator(static::$model);
+
+        $word = $generator->wordFromEndOfSentence(
+            lengthHint: 5,
+            positionFromEnd: 1
+        );
+
+        expect($word)->toBeString();
+    }
+}
