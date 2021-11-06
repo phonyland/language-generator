@@ -1,49 +1,54 @@
 {
     "name": "phonyland/language-generator",
-    "description": "\uD83C\uDFD7 Language Generator for \uD83D\uDE43 Phony Framework",
-    "homepage": "http://phony.land",
     "type": "library",
+    "description": "\ud83c\udfd7 Language Generator for \ud83d\ude43 Phony Framework",
+    "homepage": "http://phony.land",
     "license": "MIT",
     "authors": [
         {
-            "name": "Yunus Emre Deligöz",
+            "name": "Yunus Emre Delig\u00f6z",
             "email": "ye@deligoz.me"
         }
     ],
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "^8.0",
         "phonyland/language-model": "dev-master"
+    },
+    "require-dev": {
+        "phonyland/dev-tools": "dev-master"
+    },
+    "config": {
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
             "Phonyland\\LanguageGenerator\\": "src/"
         }
     },
-    "require-dev": {
-        "phonyland/dev-tools": "dev-master"
-    },
     "autoload-dev": {
         "psr-4": {
             "Phonyland\\LanguageGenerator\\Tests\\": "tests"
         }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
+        "post-autoload-dump": [
+            "@normalize",
+            "@validate",
+            "@thanks"
+        ],
         "lint": "php-cs-fixer fix -v",
-        "process": "rector process src",
-        "test:lint": "php-cs-fixer fix -v --dry-run",
-        "test:process": "rector process src --dry-run",
-        "test:types": "phpstan analyse --ansi --memory-limit=-1",
-        "test:unit": "pest --colors=always",
+        "normalize": "@composer normalize --ansi --no-interaction --quiet",
         "test": [
             "@test:lint",
-            "@test:process",
             "@test:types",
             "@test:unit"
-        ]
+        ],
+        "test:lint": "php-cs-fixer fix -v --dry-run",
+        "test:types": "phpstan analyse --ansi --memory-limit=-1",
+        "test:unit": "pest --colors=always",
+        "thanks": "@composer thanks --ansi --no-interaction --quiet",
+        "validate": "@composer validate --strict --ansi --no-interaction"
     }
 }
