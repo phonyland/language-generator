@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Phonyland\LanguageGenerator;
 
-use Phonyland\LanguageModel\Model;
 use RuntimeException;
 
 class Generator
 {
-    protected Model $model;
+    public array $modelData;
+    public int $seed;
 
-    public function __construct(Model $model)
+    public function __construct(array $model, ?int $seed = null)
     {
-        $this->model = $model;
+        $this->modelData = $model;
+        $this->seed = $seed ?? mt_rand(0, mt_getrandmax());
+        mt_srand($this->seed);
     }
 
     public function word(
