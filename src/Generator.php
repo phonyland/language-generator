@@ -23,44 +23,48 @@ class Generator
         ?int $position = null,
         ?string $firstNgram = null,
     ): ?string {
-        if ($firstNgram !== null && mb_strlen($firstNgram) !== $this->model->config->n) {
-            throw new RuntimeException("Given first n-Gram lenght must equal to {$this->model->config->n} for this model.");
+        if ($firstNgram !== null && mb_strlen($firstNgram) !== $this->modelData['config']['n']) {
+            throw new RuntimeException("Given first n-Gram lenght must equal to {$this->modelData['config']['n']} for this model.");
         }
 
         if ($position === 0) {
             throw new RuntimeException('Position can not be zero.');
         }
 
-        if ($firstNgram !== null && ! isset($this->model->elements[$firstNgram])) {
+        if ($firstNgram !== null && ! isset($this->modelData['data']['elements'][$firstNgram])) {
             return null;
         }
 
-        if ($position !== null && $position <= $this->model->config->numberOfSentenceElements) {
-            $ngram = array_rand($this->model->sentenceElements[$position]);
+        if ($position !== null && $position <= $this->modelData['config']['number_of_sentence_elements']) {
+            $ngram = array_rand($this->modelData['data']['sentence_elements'][$position]);
         } else {
-            $ngram = $firstNgram ?? array_rand($this->model->firstElements);
+            $ngram = $firstNgram ?? $this->weightedRandom(
+                    elements: $this->modelData['data']['first_elements'],
+                    count: $this->modelData['data']['first_elements_count'],
+                    weightCount: $this->modelData['data']['first_elements_weight_count'],
+                );
         }
 
-        $ngramData = $this->model->elements[$ngram];
-        $loop = isset($ngramData[0]) || isset($ngramData[1]);
+        $ngramElement = $this->modelData['data']['elements'][$ngram];
+        $loop = !empty($ngramElement['c']) || !empty($ngramElement['lc']);
         $word = $ngram;
 
         while ($loop) {
             if (
-                ($ngramData[0] === 0) ||
-                ($lengthHint <= mb_strlen($word) && $ngramData[1] !== 0)
+                (empty($ngramElement['c'])) ||
+                ($lengthHint <= mb_strlen($word) && !empty($ngramElement['lc']))
             ) {
                 // has any last child?
-                if ($ngramData[1] !== 0) {
-                    $ngram = array_rand($ngramData[1]); //random last child
+                if (!empty($ngramElement['lc'])) {
+                    $ngram = array_rand($ngramElement['lc']); //random last child
                     $word .= mb_substr($ngram, -1);
                 }
 
                 $loop = false; //get out of the loop
             } else {
-                $ngram = array_rand($ngramData[0]); //random child
+                $ngram = array_rand($ngramElement['c']); //random child
                 $word .= mb_substr($ngram, -1);
-                $ngramData = $this->model->elements[$ngram]; //set up the next set of probabilities
+                $ngramElement = $this->modelData['data']['elements'][$ngram]; //set up the next set of probabilities
             }
         }
 
