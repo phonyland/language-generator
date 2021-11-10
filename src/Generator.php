@@ -8,13 +8,26 @@ use RuntimeException;
 
 class Generator
 {
+    // region Attributes
+
+    /**
+     * @var array<mixed>
+     */
     protected array $modelData;
 
     public int $seed;
 
-    public function __construct(array $model, ?int $seed = null)
+    // endregion
+
+    // region Public Methods
+
+    /**
+     * @param  array<mixed>     $modelData
+     * @param  int|null  $seed
+     */
+    public function __construct(array $modelData, ?int $seed = null)
     {
-        $this->modelData = $model;
+        $this->modelData = $modelData;
         $this->seed = $seed ?? mt_rand(0, mt_getrandmax());
         mt_srand($this->seed);
     }
@@ -43,7 +56,7 @@ class Generator
         }
 
         $ngramElement = $this->modelData['data']['elements'][$ngram];
-        $loop = ! empty($ngramElement['c']) || ! empty($ngramElement['lc']);
+        $loop = $ngramElement['c']['c'] !== 0 || $ngramElement['lc']['c'] !== 0;
         $word = $ngram;
 
         while ($loop) {
@@ -92,6 +105,15 @@ class Generator
         );
     }
 
+    // endregion
+
+    // region Protected Methods
+
+    /**
+     * @param  array<mixed>  $elements
+     *
+     * @return string
+     */
     protected function weightedRandom(array &$elements): string
     {
         $randomWeight = mt_rand(0, $elements['sw']);
@@ -114,4 +136,6 @@ class Generator
 
         return $elements['e'][$low];
     }
+
+    // endregion
 }
