@@ -43,7 +43,7 @@ class Generator
         }
 
         $ngramElement = $this->modelData['data']['elements'][$ngram];
-        $loop = !empty($ngramElement['c']) || !empty($ngramElement['lc']);
+        $loop = ! empty($ngramElement['c']) || ! empty($ngramElement['lc']);
         $word = $ngram;
 
         while ($loop) {

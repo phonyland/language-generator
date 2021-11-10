@@ -25,7 +25,8 @@ class GeneratorTest extends TestCase
                 ->excludeOriginals(true)
                 ->frequencyPrecision(7)
                 ->numberOfSentenceElements(3)
-                ->tokenizer((new Tokenizer())
+                ->tokenizer(
+                    (new Tokenizer())
                     ->addWordSeparatorPattern(TokenizerFilter::WHITESPACE_SEPARATOR)
                     ->addWordFilterRule(TokenizerFilter::LATIN_EXTENDED_ALPHABETICAL)
                     ->addSentenceSeparatorPattern(['.', '?', '!', ':', ';', '\n'])
