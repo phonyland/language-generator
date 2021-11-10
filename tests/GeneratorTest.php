@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
+use Phonyland\LanguageGenerator\Generator;
 use Phonyland\LanguageModel\Model;
 use Phonyland\NGram\Tokenizer;
 use Phonyland\NGram\TokenizerFilter;
-use Phonyland\LanguageGenerator\Generator;
 use PHPUnit\Framework\TestCase;
 
 class GeneratorTest extends TestCase
 {
-    protected static ?Model $model = null;
+    protected static array $modelData = [];
 
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
-        if (static::$model === null) {
+        if (isset(static::$modelData)) {
             $model = new Model('Test Model');
             $model->config
                 ->n(3)
@@ -32,19 +32,17 @@ class GeneratorTest extends TestCase
                     ->toLowercase()
                 );
 
-            $data = file_get_contents(getcwd().'/tests/stubs/alice.txt');
-
-            $model->feed($data);
-            $model->calculate();
-
-            static::$model = $model;
+            static::$modelData = $model
+                ->feed(file_get_contents(getcwd().'/tests/stubs/alice.txt'))
+                ->calculate()
+                ->toArray();
         }
     }
 
     /** @test */
     public function first_ngram_lenght_must_equal_to_n(): void
     {
-        $generator = new Generator(static::$model);
+        $generator = new Generator(static::$modelData);
 
         $this->expectException(RuntimeException::class);
 
@@ -57,7 +55,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function word_position_can_not_be_zero(): void
     {
-        $generator = new Generator(static::$model);
+        $generator = new Generator(static::$modelData);
 
         $this->expectException(RuntimeException::class);
 
@@ -70,7 +68,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function word_returns_null_for_a_non_existing_first_ngram(): void
     {
-        $generator = new Generator(static::$model);
+        $generator = new Generator(static::$modelData);
 
         $this->expectException(RuntimeException::class);
 
@@ -85,7 +83,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function word_with_lengthHint(): void
     {
-        $generator = new Generator(static::$model);
+        $generator = new Generator(static::$modelData);
 
         $word = $generator->word(lengthHint: 3);
 
@@ -95,20 +93,20 @@ class GeneratorTest extends TestCase
     /** @test */
     public function word_firstNgram(): void
     {
-        $generator = new Generator(static::$model);
+        $generator = new Generator(static::$modelData);
 
         $word = $generator->word(
             lengthHint: 5,
-            firstNgram: 'goo'
+            firstNgram: 'the'
         );
 
-        expect($word)->toStartWith('goo');
+        expect($word)->toStartWith('the');
     }
 
     /** @test */
     public function wordFromStartOfSentence(): void
     {
-        $generator = new Generator(static::$model);
+        $generator = new Generator(static::$modelData);
 
         $word = $generator->wordFromStartOfSentence(
             lengthHint: 5,
@@ -121,7 +119,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function wordFromEndOfSentence(): void
     {
-        $generator = new Generator(static::$model);
+        $generator = new Generator(static::$modelData);
 
         $word = $generator->wordFromEndOfSentence(
             lengthHint: 5,

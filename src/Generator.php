@@ -8,7 +8,8 @@ use RuntimeException;
 
 class Generator
 {
-    public array $modelData;
+    protected array $modelData;
+
     public int $seed;
 
     public function __construct(array $model, ?int $seed = null)
@@ -36,13 +37,9 @@ class Generator
         }
 
         if ($position !== null && $position <= $this->modelData['config']['number_of_sentence_elements']) {
-            $ngram = array_rand($this->modelData['data']['sentence_elements'][$position]);
+            $ngram = $this->weightedRandom($this->modelData['data']['sentence_elements'][$position]);
         } else {
-            $ngram = $firstNgram ?? $this->weightedRandom(
-                    elements: $this->modelData['data']['first_elements'],
-                    count: $this->modelData['data']['first_elements_count'],
-                    weightCount: $this->modelData['data']['first_elements_weight_count'],
-                );
+            $ngram = $firstNgram ?? $this->weightedRandom($this->modelData['data']['first_elements']);
         }
 
         $ngramElement = $this->modelData['data']['elements'][$ngram];
@@ -51,18 +48,18 @@ class Generator
 
         while ($loop) {
             if (
-                (empty($ngramElement['c'])) ||
-                ($lengthHint <= mb_strlen($word) && !empty($ngramElement['lc']))
+                ($ngramElement['c']['c'] === 0) ||
+                ($lengthHint <= mb_strlen($word) && $ngramElement['lc']['c'] !== 0)
             ) {
                 // has any last child?
-                if (!empty($ngramElement['lc'])) {
-                    $ngram = array_rand($ngramElement['lc']); //random last child
+                if ($ngramElement['lc']['c'] !== 0) {
+                    $ngram = $this->weightedRandom($ngramElement['lc']); //random last child
                     $word .= mb_substr($ngram, -1);
                 }
 
                 $loop = false; //get out of the loop
             } else {
-                $ngram = array_rand($ngramElement['c']); //random child
+                $ngram = $this->weightedRandom($ngramElement['c']); //random child
                 $word .= mb_substr($ngram, -1);
                 $ngramElement = $this->modelData['data']['elements'][$ngram]; //set up the next set of probabilities
             }
@@ -72,7 +69,7 @@ class Generator
     }
 
     public function wordFromStartOfSentence(
-        $lengthHint,
+        int $lengthHint,
         int $positionFromStart,
         ?string $firstNgram = null,
     ): ?string {
@@ -84,7 +81,7 @@ class Generator
     }
 
     public function wordFromEndOfSentence(
-        $lengthHint,
+        int $lengthHint,
         int $positionFromEnd,
         ?string $firstNgram = null,
     ): ?string {
@@ -95,8 +92,26 @@ class Generator
         );
     }
 
-    public function sentence($nbWords = 6, $variableNbWords = true): string
+    protected function weightedRandom(array &$elements): string
     {
-        // exclude previously generated words
+        $randomWeight = mt_rand(0, $elements['sw']);
+
+        $low = 0;
+        $high = $elements['c'] - 1;
+
+        while ($low <= $high) {
+            $probe = (int) (($low + $high) / 2);
+            $midValue = $elements['cw'][$probe];
+
+            if ($midValue < $randomWeight) {
+                $low = $probe + 1;
+            } elseif ($midValue > $randomWeight) {
+                $high = $probe - 1;
+            } else {
+                return $elements['e'][$probe];
+            }
+        }
+
+        return $elements['e'][$low];
     }
 }
