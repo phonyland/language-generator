@@ -28,7 +28,7 @@ class GeneratorTest extends TestCase
                 ->tokenizer(
                     (new Tokenizer())
                     ->addWordSeparatorPattern(TokenizerFilter::WHITESPACE_SEPARATOR)
-                    ->addWordFilterRule(TokenizerFilter::LATIN_EXTENDED_ALPHABETICAL)
+                    ->addWordFilterRule(TokenizerFilter::ALPHABETICAL)
                     ->addSentenceSeparatorPattern(['.', '?', '!', ':', ';', '\n'])
                     ->toLowercase()
                 );
@@ -105,28 +105,14 @@ class GeneratorTest extends TestCase
     }
 
     /** @test */
-    public function wordFromStartOfSentence(): void
+    public function words(): void
     {
         $generator = new Generator(static::$modelData);
 
-        $word = $generator->wordFromStartOfSentence(
-            lengthHint: 5,
-            positionFromStart: 1
-        );
+        $words = $generator->words(10, 5);
 
-        expect($word)->toBeString();
-    }
-
-    /** @test */
-    public function wordFromEndOfSentence(): void
-    {
-        $generator = new Generator(static::$modelData);
-
-        $word = $generator->wordFromEndOfSentence(
-            lengthHint: 5,
-            positionFromEnd: 1
-        );
-
-        expect($word)->toBeString();
+        expect($words)
+            ->toBeArray()
+            ->toHaveLength(10);
     }
 }

@@ -81,28 +81,19 @@ class Generator
         return $word;
     }
 
-    public function wordFromStartOfSentence(
+    public function words(
+        int $count,
         int $lengthHint,
-        int $positionFromStart,
+        ?int $position = null,
         ?string $firstNgram = null,
-    ): ?string {
-        return $this->word(
-            lengthHint: $lengthHint,
-            position:   $positionFromStart,
-            firstNgram: $firstNgram
-        );
-    }
+    ): array {
+        $words = [];
 
-    public function wordFromEndOfSentence(
-        int $lengthHint,
-        int $positionFromEnd,
-        ?string $firstNgram = null,
-    ): ?string {
-        return $this->word(
-            lengthHint: $lengthHint,
-            position:   $positionFromEnd * -1,
-            firstNgram: $firstNgram
-        );
+        for ($i = 0; $i < $count; $i++) {
+            $words[] = $this->word($lengthHint, $position, $firstNgram);
+        }
+
+        return $words;
     }
 
     // endregion
