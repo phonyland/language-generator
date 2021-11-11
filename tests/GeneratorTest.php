@@ -154,7 +154,7 @@ class GeneratorTest extends TestCase
         $generator = new Generator(static::$modelData);
 
         $paragraphs = $generator->paragraphs(3, 8);
-        
+
         expect($paragraphs)
             ->toBeArray()
             ->toHaveLength(3);

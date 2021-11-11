@@ -159,8 +159,7 @@ class Generator
     public function paragraph(
         int $numberOfSentences = 7,
         string $endingPunctuation = '.',
-    ): string
-    {
+    ): string {
         return implode(' ', $this->sentences($numberOfSentences, $endingPunctuation));
     }
 
