@@ -17,7 +17,6 @@ class GeneratorTest extends TestCase
         parent::setUp();
 
         if (static::$generator === null) {
-            ray('run');
             $model = new Model('Test Model');
             $model->config
                 ->n(3)
