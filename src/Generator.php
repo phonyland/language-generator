@@ -176,6 +176,23 @@ class Generator
         return $paragraphs;
     }
 
+    public function text(
+        int $maxNumberOfCharacters,
+        string $endingPunctuation = '.',
+    ): string
+    {
+        $sentences = [];
+        $textLenght = 0;
+
+        do {
+            $sentence = $this->sentence($this->weightedRandom($this->modelData['data']['word_lengths']));
+            $textLenght += mb_strlen($sentence);
+            $sentences[] = $sentence;
+        } while ($textLenght <= $maxNumberOfCharacters);
+
+        return substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - 1) . $endingPunctuation;
+    }
+
     // endregion
 
     // region Protected Methods
@@ -183,7 +200,7 @@ class Generator
     /**
      * @param  array<mixed>  $elements
      *
-     * @return string
+     * @return string|int
      */
     protected function weightedRandom(array &$elements): string|int
     {

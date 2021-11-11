@@ -159,4 +159,14 @@ class GeneratorTest extends TestCase
             ->toBeArray()
             ->toHaveLength(3);
     }
+
+    /** @test */
+    public function text(): void
+    {
+        $generator = new Generator(static::$modelData);
+
+        $text = $generator->text(200);
+
+        expect($text)->toHaveLength(200);
+    }
 }
