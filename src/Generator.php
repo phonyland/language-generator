@@ -179,8 +179,7 @@ class Generator
     public function text(
         int $maxNumberOfCharacters,
         string $endingPunctuation = '.',
-    ): string
-    {
+    ): string {
         $sentences = [];
         $textLenght = 0;
 
@@ -190,7 +189,7 @@ class Generator
             $sentences[] = $sentence;
         } while ($textLenght <= $maxNumberOfCharacters);
 
-        return substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - 1) . $endingPunctuation;
+        return substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - 1).$endingPunctuation;
     }
 
     // endregion

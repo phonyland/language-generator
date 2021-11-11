@@ -10,13 +10,14 @@ use PHPUnit\Framework\TestCase;
 
 class GeneratorTest extends TestCase
 {
-    protected static array $modelData = [];
+    protected static ?Generator $generator = null;
 
-    public static function setUpBeforeClass(): void
+    protected function setUp(): void
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
-        if (isset(static::$modelData)) {
+        if (static::$generator === null) {
+            ray('run');
             $model = new Model('Test Model');
             $model->config
                 ->n(3)
@@ -27,27 +28,25 @@ class GeneratorTest extends TestCase
                 ->numberOfSentenceElements(3)
                 ->tokenizer(
                     (new Tokenizer())
-                    ->addWordSeparatorPattern(TokenizerFilter::WHITESPACE_SEPARATOR)
-                    ->addWordFilterRule(TokenizerFilter::ALPHABETICAL)
-                    ->addSentenceSeparatorPattern(['.', '?', '!', ':', ';', '\n'])
-                    ->toLowercase()
+                        ->addWordSeparatorPattern(TokenizerFilter::WHITESPACE_SEPARATOR)
+                        ->addWordFilterRule(TokenizerFilter::ALPHABETICAL)
+                        ->addSentenceSeparatorPattern(['.', '?', '!', ':', ';', '\n'])
+                        ->toLowercase()
                 );
 
-            static::$modelData = $model
-                ->feed(file_get_contents(getcwd().'/tests/stubs/alice.txt'))
-                ->calculate()
-                ->toArray();
+            $model->feed(file_get_contents(getcwd().'/tests/stubs/alice.txt'))
+                  ->calculate();
+
+            static::$generator = new Generator($model->toArray());
         }
     }
 
     /** @test */
     public function first_ngram_lenght_must_equal_to_n(): void
     {
-        $generator = new Generator(static::$modelData);
-
         $this->expectException(RuntimeException::class);
 
-        $generator->word(
+        static::$generator->word(
             lengthHint: 5,
             firstNgram: 'aaaaaaaaaa'
         );
@@ -56,11 +55,9 @@ class GeneratorTest extends TestCase
     /** @test */
     public function word_position_can_not_be_zero(): void
     {
-        $generator = new Generator(static::$modelData);
-
         $this->expectException(RuntimeException::class);
 
-        $generator->word(
+        static::$generator->word(
             lengthHint: 5,
             position: 0
         );
@@ -69,11 +66,9 @@ class GeneratorTest extends TestCase
     /** @test */
     public function word_returns_null_for_a_non_existing_first_ngram(): void
     {
-        $generator = new Generator(static::$modelData);
-
         $this->expectException(RuntimeException::class);
 
-        $word = $generator->word(
+        $word = static::$generator->word(
             lengthHint: 5,
             firstNgram: 'non-existing-ngram'
         );
@@ -84,9 +79,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function word_with_lengthHint(): void
     {
-        $generator = new Generator(static::$modelData);
-
-        $word = $generator->word(lengthHint: 3);
+        $word = static::$generator->word(lengthHint: 3);
 
         expect(mb_strlen($word))->toBeGreaterThanOrEqual(3);
     }
@@ -94,9 +87,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function word_firstNgram(): void
     {
-        $generator = new Generator(static::$modelData);
-
-        $word = $generator->word(
+        $word = static::$generator->word(
             lengthHint: 5,
             firstNgram: 'the'
         );
@@ -107,9 +98,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function words(): void
     {
-        $generator = new Generator(static::$modelData);
-
-        $words = $generator->words(10, 5);
+        $words = static::$generator->words(10, 5);
 
         expect($words)
             ->toBeArray()
@@ -119,9 +108,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function sentence(): void
     {
-        $generator = new Generator(static::$modelData);
-
-        $words = $generator->sentence(10);
+        $words = static::$generator->sentence(10);
 
         expect(explode(' ', $words))->toHaveCount(10);
     }
@@ -129,9 +116,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function sentences(): void
     {
-        $generator = new Generator(static::$modelData);
-
-        $sentences = $generator->sentences(10);
+        $sentences = static::$generator->sentences(10);
 
         expect($sentences)
             ->toBeArray()
@@ -141,9 +126,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function paragraph(): void
     {
-        $generator = new Generator(static::$modelData);
-
-        $paragraph = $generator->paragraph(10);
+        $paragraph = static::$generator->paragraph(10);
 
         expect($paragraph)->toBeString();
     }
@@ -151,9 +134,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function paragraphs(): void
     {
-        $generator = new Generator(static::$modelData);
-
-        $paragraphs = $generator->paragraphs(3, 8);
+        $paragraphs = static::$generator->paragraphs(3, 8);
 
         expect($paragraphs)
             ->toBeArray()
@@ -163,9 +144,7 @@ class GeneratorTest extends TestCase
     /** @test */
     public function text(): void
     {
-        $generator = new Generator(static::$modelData);
-
-        $text = $generator->text(200);
+        $text = static::$generator->text(200);
 
         expect($text)->toHaveLength(200);
     }
