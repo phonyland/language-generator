@@ -163,6 +163,20 @@ class Generator
     {
         return implode(' ', $this->sentences($numberOfSentences, $endingPunctuation));
     }
+
+    public function paragraphs(
+        int $numberOfParagraphs = 3,
+        int $numberOfSentences = 7,
+    ): array {
+        $paragraphs = [];
+
+        for ($i = 0; $i < $numberOfParagraphs; $i++) {
+            $paragraphs[] = $this->paragraph($numberOfSentences);
+        }
+
+        return $paragraphs;
+    }
+
     // endregion
 
     // region Protected Methods
