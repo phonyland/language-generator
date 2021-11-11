@@ -115,4 +115,14 @@ class GeneratorTest extends TestCase
             ->toBeArray()
             ->toHaveLength(10);
     }
+
+    /** @test */
+    public function sentence(): void
+    {
+        $generator = new Generator(static::$modelData);
+
+        $words = $generator->sentence(10);
+
+        expect(explode(' ', $words))->toHaveCount(10);
+    }
 }

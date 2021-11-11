@@ -45,15 +45,18 @@ class Generator
             throw new RuntimeException('Position can not be zero.');
         }
 
+        if ($position !== null && abs($position) > $this->modelData['config']['number_of_sentence_elements']) {
+            $numberOfSentenceElements = $this->modelData['config']['number_of_sentence_elements'];
+            throw new RuntimeException("Position must be >=$numberOfSentenceElements or <=$numberOfSentenceElements.");
+        }
+
         if ($firstNgram !== null && ! isset($this->modelData['data']['elements'][$firstNgram])) {
             return null;
         }
 
-        if ($position !== null && $position <= $this->modelData['config']['number_of_sentence_elements']) {
-            $ngram = $this->weightedRandom($this->modelData['data']['sentence_elements'][$position]);
-        } else {
-            $ngram = $firstNgram ?? $this->weightedRandom($this->modelData['data']['first_elements']);
-        }
+        $ngram = $position !== null
+            ? $this->weightedRandom($this->modelData['data']['sentence_elements'][$position])
+            : $firstNgram ?? $this->weightedRandom($this->modelData['data']['first_elements']);
 
         $ngramElement = $this->modelData['data']['elements'][$ngram];
         $loop = $ngramElement['c']['c'] !== 0 || $ngramElement['lc']['c'] !== 0;
@@ -96,6 +99,48 @@ class Generator
         return $words;
     }
 
+    public function sentence(
+        int $numberOfWords = 7,
+        string $endingPunctuation = '.'
+    ): string {
+        $startingWords = [];
+        $words = [];
+        $endingWords = [];
+
+        // This phony language model has any sentence elements?
+        if ($this->modelData['config']['number_of_sentence_elements'] > 0) {
+            $positionedWordsCount = $numberOfWords >= $this->modelData['config']['number_of_sentence_elements'] * 2
+                ? $this->modelData['config']['number_of_sentence_elements']
+                : (int) ($numberOfWords / 2);
+
+            for ($i = 0; $i < $positionedWordsCount; $i++) {
+                $startingWords[] = $this->word(
+                    lengthHint: $this->weightedRandom($this->modelData['data']['word_lengths']),
+                    position: $i + 1,
+                );
+
+                $endingWords[] = $this->word(
+                    lengthHint: $this->weightedRandom($this->modelData['data']['word_lengths']),
+                    position: ($i + 1) - ($positionedWordsCount + 1),
+                );
+            }
+
+            // Set remaining word count
+            $numberOfWords -= $positionedWordsCount * 2;
+        }
+
+        for ($i = 0; $i < $numberOfWords; $i++) {
+            $words[] = $this->word(
+                lengthHint: $this->weightedRandom($this->modelData['data']['word_lengths']),
+            );
+        }
+
+        $words = implode(' ', array_merge($startingWords, $words, $endingWords)) . $endingPunctuation;
+
+        return mb_strtoupper(mb_substr($words, 0, 1)).mb_substr($words, 1);
+    }
+
+
     // endregion
 
     // region Protected Methods
@@ -105,7 +150,7 @@ class Generator
      *
      * @return string
      */
-    protected function weightedRandom(array &$elements): string
+    protected function weightedRandom(array &$elements): string|int
     {
         $randomWeight = mt_rand(0, $elements['sw']);
 
