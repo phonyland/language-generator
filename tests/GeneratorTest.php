@@ -137,4 +137,14 @@ class GeneratorTest extends TestCase
             ->toBeArray()
             ->toHaveLength(10);
     }
+
+    /** @test */
+    public function paragraph(): void
+    {
+        $generator = new Generator(static::$modelData);
+
+        $paragraph = $generator->paragraph(10);
+
+        expect($paragraph)->toBeString();
+    }
 }

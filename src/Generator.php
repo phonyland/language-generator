@@ -156,6 +156,13 @@ class Generator
         return $sentences;
     }
 
+    public function paragraph(
+        int $numberOfSentences = 7,
+        string $endingPunctuation = '.',
+    ): string
+    {
+        return implode(' ', $this->sentences($numberOfSentences, $endingPunctuation));
+    }
     // endregion
 
     // region Protected Methods
