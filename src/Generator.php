@@ -85,14 +85,14 @@ class Generator
     }
 
     public function words(
-        int $count,
+        int $numberOfWords,
         int $lengthHint,
         ?int $position = null,
         ?string $firstNgram = null,
     ): array {
         $words = [];
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $numberOfWords; $i++) {
             $words[] = $this->word($lengthHint, $position, $firstNgram);
         }
 
@@ -101,7 +101,7 @@ class Generator
 
     public function sentence(
         int $numberOfWords = 7,
-        string $endingPunctuation = '.'
+        string $endingPunctuation = '.',
     ): string {
         $startingWords = [];
         $words = [];
@@ -140,6 +140,21 @@ class Generator
         return mb_strtoupper(mb_substr($words, 0, 1)).mb_substr($words, 1);
     }
 
+    public function sentences(
+        int $numberOfSentences = 7,
+        string $endingPunctuation = '.',
+    ): array {
+        $sentences = [];
+
+        for ($i = 0; $i < $numberOfSentences; $i++) {
+            $sentences[] = $this->sentence(
+                numberOfWords: $this->weightedRandom($this->modelData['data']['sentence_lengths']),
+                endingPunctuation: $endingPunctuation,
+            );
+        }
+
+        return $sentences;
+    }
 
     // endregion
 

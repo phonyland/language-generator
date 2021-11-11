@@ -125,4 +125,16 @@ class GeneratorTest extends TestCase
 
         expect(explode(' ', $words))->toHaveCount(10);
     }
+
+    /** @test */
+    public function sentences(): void
+    {
+        $generator = new Generator(static::$modelData);
+
+        $sentences = $generator->sentences(10);
+
+        expect($sentences)
+            ->toBeArray()
+            ->toHaveLength(10);
+    }
 }
