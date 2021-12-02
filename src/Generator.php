@@ -32,6 +32,15 @@ class Generator
         mt_srand($this->seed);
     }
 
+    /**
+     * Generates a word.
+     *
+     * @param  int|null     $lengthHint
+     * @param  int|null     $position
+     * @param  string|null  $firstNgram
+     *
+     * @return string|null
+     */
     public function word(
         ?int $lengthHint = null,
         ?int $position = null,
@@ -88,6 +97,16 @@ class Generator
         return $word;
     }
 
+    /**
+     * Generates multiple words.
+     *
+     * @param  int          $numberOfWords
+     * @param  int          $lengthHint
+     * @param  int|null     $position
+     * @param  string|null  $firstNgram
+     *
+     * @return array<string>
+     */
     public function words(
         int $numberOfWords,
         int $lengthHint,
@@ -103,6 +122,14 @@ class Generator
         return $words;
     }
 
+    /**
+     * Generates a sentence.
+     *
+     * @param  int     $numberOfWords
+     * @param  string  $endingPunctuation
+     *
+     * @return string
+     */
     public function sentence(
         int $numberOfWords = 7,
         string $endingPunctuation = '.',
@@ -144,6 +171,14 @@ class Generator
         return mb_strtoupper(mb_substr($words, 0, 1)).mb_substr($words, 1);
     }
 
+    /**
+     * Generates multiple sentences.
+     *
+     * @param  int     $numberOfSentences
+     * @param  string  $endingPunctuation
+     *
+     * @return array<string>
+     */
     public function sentences(
         int $numberOfSentences = 7,
         string $endingPunctuation = '.',
@@ -160,6 +195,14 @@ class Generator
         return $sentences;
     }
 
+    /**
+     * Generates a paragraph.
+     *
+     * @param  int     $numberOfSentences
+     * @param  string  $endingPunctuation
+     *
+     * @return string
+     */
     public function paragraph(
         int $numberOfSentences = 7,
         string $endingPunctuation = '.',
@@ -167,6 +210,14 @@ class Generator
         return implode(' ', $this->sentences($numberOfSentences, $endingPunctuation));
     }
 
+    /**
+     * * Generates multiple paragraphs.
+     *
+     * @param  int  $numberOfParagraphs
+     * @param  int  $numberOfSentences
+     *
+     * @return array<string>
+     */
     public function paragraphs(
         int $numberOfParagraphs = 3,
         int $numberOfSentences = 7,
@@ -180,6 +231,14 @@ class Generator
         return $paragraphs;
     }
 
+    /**
+     * Generates a text.
+     *
+     * @param  int     $maxNumberOfCharacters
+     * @param  string  $endingPunctuation
+     *
+     * @return string
+     */
     public function text(
         int $maxNumberOfCharacters,
         string $endingPunctuation = '.',
