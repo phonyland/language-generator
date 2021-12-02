@@ -10,9 +10,7 @@ class Generator
 {
     // region Attributes
 
-    /**
-     * @var array<mixed>
-     */
+    /** @var array<mixed> */
     protected array $modelData;
 
     public int $seed;
@@ -22,6 +20,8 @@ class Generator
     // region Public Methods
 
     /**
+     * Generator constructor.
+     *
      * @param  array<mixed>     $modelData
      * @param  int|null  $seed
      */
@@ -33,7 +33,7 @@ class Generator
     }
 
     public function word(
-        int $lengthHint,
+        ?int $lengthHint = null,
         ?int $position = null,
         ?string $firstNgram = null,
     ): ?string {
@@ -47,11 +47,15 @@ class Generator
 
         if ($position !== null && abs($position) > $this->modelData['config']['number_of_sentence_elements']) {
             $numberOfSentenceElements = $this->modelData['config']['number_of_sentence_elements'];
-            throw new RuntimeException("Position must be >=$numberOfSentenceElements or <=$numberOfSentenceElements.");
+            throw new RuntimeException("Position must be >=-$numberOfSentenceElements or <=+$numberOfSentenceElements.");
         }
 
         if ($firstNgram !== null && ! isset($this->modelData['data']['elements'][$firstNgram])) {
             return null;
+        }
+
+        if ($lengthHint === null) {
+            $lengthHint = $this->modelData['config']['n'];
         }
 
         $ngram = $position !== null
@@ -201,7 +205,7 @@ class Generator
      *
      * @return string|int
      */
-    protected function weightedRandom(array &$elements): string|int
+    protected function weightedRandom(array & $elements): string|int
     {
         $randomWeight = mt_rand(0, $elements['sw']);
 

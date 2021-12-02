@@ -12,6 +12,8 @@ class GeneratorTest extends TestCase
 {
     protected static ?Generator $generator = null;
 
+    protected static int $n = 3;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -19,7 +21,7 @@ class GeneratorTest extends TestCase
         if (static::$generator === null) {
             $model = new Model('Test Model');
             $model->config
-                ->n(3)
+                ->n(static::$n)
                 ->minLenght(3)
                 ->unique(false)
                 ->excludeOriginals(true)
@@ -81,6 +83,14 @@ class GeneratorTest extends TestCase
         $word = static::$generator->word(lengthHint: 3);
 
         expect(mb_strlen($word))->toBeGreaterThanOrEqual(3);
+    }
+
+    /** @test */
+    public function word_lengthHint_will_be_the_n_if_not_set(): void
+    {
+        $word = static::$generator->word();
+
+        expect(mb_strlen($word))->toBeGreaterThanOrEqual(static::$n);
     }
 
     /** @test */
