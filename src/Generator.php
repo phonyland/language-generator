@@ -37,17 +37,17 @@ class Generator
      *
      * @param  int|null     $lengthHint
      * @param  int|null     $position
-     * @param  string|null  $firstNgram
+     * @param  string|null  $startingNGram
      *
      * @return string|null
      */
     public function word(
         ?int $lengthHint = null,
         ?int $position = null,
-        ?string $firstNgram = null,
+        ?string $startingNGram = null,
     ): ?string {
-        if ($firstNgram !== null && mb_strlen($firstNgram) !== $this->modelData['config']['n']) {
-            throw new RuntimeException("Given first n-Gram lenght must equal to {$this->modelData['config']['n']} for this model.");
+        if ($startingNGram !== null && mb_strlen($startingNGram) !== $this->modelData['config']['n']) {
+            throw new RuntimeException("First n-Gram lenght must equal to {$this->modelData['config']['n']} for this model.");
         }
 
         if ($position === 0) {
@@ -59,17 +59,17 @@ class Generator
             throw new RuntimeException("Position must be >=-$numberOfSentenceElements or <=+$numberOfSentenceElements.");
         }
 
-        if ($firstNgram !== null && ! isset($this->modelData['data']['elements'][$firstNgram])) {
+        if ($startingNGram !== null && ! isset($this->modelData['data']['elements'][$startingNGram])) {
             return null;
         }
 
         if ($lengthHint === null) {
-            $lengthHint = $this->modelData['config']['n'];
+            $lengthHint = $this->weightedRandom($this->modelData['data']['word_lengths']);
         }
 
         $ngram = $position !== null
             ? $this->weightedRandom($this->modelData['data']['sentence_elements'][$position])
-            : $firstNgram ?? $this->weightedRandom($this->modelData['data']['first_elements']);
+            : $startingNGram ?? $this->weightedRandom($this->modelData['data']['first_elements']);
 
         $ngramElement = $this->modelData['data']['elements'][$ngram];
         $loop = $ngramElement['c']['c'] !== 0 || $ngramElement['lc']['c'] !== 0;

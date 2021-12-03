@@ -15,7 +15,7 @@ class WordGeneratorTest extends BaseTestCase
 
         static::$generator->word(
             lengthHint: 5,
-            firstNgram: 'aaaaaaaaaa'
+            startingNGram: 'aaaaaaaaaa'
         );
     }
 
@@ -37,7 +37,7 @@ class WordGeneratorTest extends BaseTestCase
 
         $word = static::$generator->word(
             lengthHint: 5,
-            firstNgram: 'non-existing-ngram'
+            startingNGram: 'non-existing-ngram'
         );
 
         expect($word)->toBeNull();
@@ -64,7 +64,7 @@ class WordGeneratorTest extends BaseTestCase
     {
         $word = static::$generator->word(
             lengthHint: 5,
-            firstNgram: 'the'
+            startingNGram: 'the'
         );
 
         expect($word)->toStartWith('the');
