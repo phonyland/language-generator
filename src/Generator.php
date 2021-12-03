@@ -103,7 +103,7 @@ class Generator
      * @param  int          $numberOfWords
      * @param  int          $lengthHint
      * @param  int|null     $position
-     * @param  string|null  $firstNgram
+     * @param  string|null  $startingNGram
      *
      * @return array<string>
      */
@@ -111,12 +111,12 @@ class Generator
         int $numberOfWords,
         int $lengthHint,
         ?int $position = null,
-        ?string $firstNgram = null,
+        ?string $startingNGram = null,
     ): array {
         $words = [];
 
         for ($i = 0; $i < $numberOfWords; $i++) {
-            $words[] = $this->word($lengthHint, $position, $firstNgram);
+            $words[] = $this->word($lengthHint, $position, $startingNGram);
         }
 
         return $words;
