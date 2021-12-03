@@ -264,7 +264,7 @@ class Generator
      *
      * @return string|int
      */
-    protected function weightedRandom(array & $elements): string|int
+    public function weightedRandom(array &$elements): string|int
     {
         $randomWeight = mt_rand(0, $elements['sw']);
 
