@@ -61,6 +61,16 @@ class WordGeneratorTest extends BaseTestCase
     }
 
     /** @test */
+    public function it_can_generate_a_word(): void
+    {
+        // Act
+        $word = static::$generator->word();
+
+        // Assert
+        expect($word)->toBeString();
+    }
+
+    /** @test */
     public function it_can_generate_a_word_with_a_length_hint(): void
     {
         // Act
