@@ -37,6 +37,6 @@ class WordsGeneratorTest extends BaseTestCase
         expect($words)
             ->toBeArray()
             ->toHaveLength($numberOfWords)
-            ->each(fn($word) => expect(mb_strlen($word->value))->toBeGreaterThanOrEqual($lengthHint));
+            ->each(fn ($word) => expect(mb_strlen($word->value))->toBeGreaterThanOrEqual($lengthHint));
     }
 }
