@@ -23,7 +23,7 @@ class WordsGeneratorTest extends BaseTestCase
         $numberOfWords = random_int(2, 10);
 
         // Act
-        $words = static::$generator->words($numberOfWords);
+        $words = static::$generator->words(numberOfWords: $numberOfWords);
 
         // Assert
         expect($words)
@@ -34,13 +34,16 @@ class WordsGeneratorTest extends BaseTestCase
     /** @test */
     public function it_can_generate_multiple_words_with_a_length_hint(): void
     {
+        // Arrange
+        $lengthHint = static::$n;
+
         // Act
-        $words = static::$generator->words(lengthHint: static::$n);
+        $words = static::$generator->words(lengthHint: $lengthHint);
 
         // Assert
         expect($words)
             ->toBeArray()
-            ->each(fn ($word) => expect(mb_strlen($word->value))->toBeGreaterThanOrEqual(static::$n));
+            ->each(fn ($word) => expect(mb_strlen($word->value))->toBeGreaterThanOrEqual($lengthHint));
     }
 
     /** @test */
@@ -52,6 +55,18 @@ class WordsGeneratorTest extends BaseTestCase
 
         // Act
         $words = static::$generator->words(position: $position);
+
+        // Assert
+        expect($words)
+            ->toBeArray()
+            ->each()->toBeString();
+    }
+
+    /** @test */
+    public function it_can_generate_multiple_words_starting_with_a_desired_n_gram(): void
+    {
+        // Act
+        $words = static::$generator->words(startingNGram: 'ali');
 
         // Assert
         expect($words)
