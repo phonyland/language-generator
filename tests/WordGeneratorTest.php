@@ -35,42 +35,48 @@ class WordGeneratorTest extends BaseTestCase
     }
 
     /** @test */
-    public function word_returns_null_for_a_non_existing_first_ngram(): void
+    public function it_returns_null_for_a_non_existing_first_ngram(): void
     {
-        $this->expectException(RuntimeException::class);
-
+        // Act
         $word = static::$generator->word(
             lengthHint: 5,
-            startingNGram: 'non-existing-ngram'
+            startingNGram: 'xxx',
         );
 
+        // Assert
         expect($word)->toBeNull();
     }
 
     /** @test */
-    public function word_with_lengthHint(): void
+    public function it_can_generate_a_word_with_a_length_hint(): void
     {
+        // Act
         $word = static::$generator->word(lengthHint: 3);
 
-        expect(mb_strlen($word))->toBeGreaterThanOrEqual(3);
+        // Assert
+        expect(mb_strlen($word))->toBeGreaterThanOrEqual(expected: 3);
     }
 
     /** @test */
-    public function word_lengthHint_will_be_the_n_if_not_set(): void
+    public function word_length_hint_will_be_the_n_if_not_set(): void
     {
+        // Act
         $word = static::$generator->word();
 
-        expect(mb_strlen($word))->toBeGreaterThanOrEqual(static::$n);
+        // Assert
+        expect(mb_strlen($word))->toBeGreaterThanOrEqual(expected: static::$n);
     }
 
     /** @test */
-    public function word_firstNgram(): void
+    public function word_first_n_gram(): void
     {
+        // Act
         $word = static::$generator->word(
             lengthHint: 5,
             startingNGram: 'the'
         );
 
+        // Assert
         expect($word)->toStartWith('the');
     }
 }
