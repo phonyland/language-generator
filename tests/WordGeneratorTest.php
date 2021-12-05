@@ -22,7 +22,7 @@ class WordGeneratorTest extends BaseTestCase
     }
 
     /** @test */
-    public function word_position_can_not_be_zero(): void
+    public function position_can_not_be_zero(): void
     {
         // Assert
         $this->expectException(GeneratorException::class);
@@ -69,7 +69,7 @@ class WordGeneratorTest extends BaseTestCase
     }
 
     /** @test */
-    public function word_first_n_gram(): void
+    public function it_can_generate_a_word_that_starts_with_a_first_n_gram(): void
     {
         // Act
         $word = static::$generator->word(
