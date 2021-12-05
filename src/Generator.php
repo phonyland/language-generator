@@ -256,11 +256,16 @@ class Generator
      */
     public function sentences(
         ?int $numberOfSentences = null,
-        string $endingPunctuation = '.',
+        null|string|array $endingPunctuation = null,
     ): array {
         $sentences = [];
 
-        // There is no paragraph lenghts data yet. So we'll just use the sentence length data.
+        if ($endingPunctuation === null) {
+            $endingPunctuation = ['.', '!', '?'];
+        }
+
+        // There is no paragraph lenghts data yet on Phony Language Models.
+        // So we'll just use the sentence length data.
         if ($numberOfSentences === null) {
             $numberOfSentences = $this->weightedRandom($this->modelData['data']['sentence_lengths']);
         }
@@ -268,7 +273,7 @@ class Generator
         for ($i = 0; $i < $numberOfSentences; $i++) {
             $sentences[] = $this->sentence(
                 numberOfWords: $this->weightedRandom($this->modelData['data']['sentence_lengths']),
-                endingPunctuation: $endingPunctuation,
+                endingPunctuation: is_array($endingPunctuation) ? $endingPunctuation[array_rand($endingPunctuation)] : $endingPunctuation,
             );
         }
 

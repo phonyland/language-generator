@@ -29,4 +29,18 @@ class SentencesGeneratorTest extends BaseTestCase
             ->toBeArray()
             ->toHaveLength(10);
     }
+
+    /** @test */
+    public function it_can_generate_multiple_sentences_with_array_of_ending_punctuations(): void
+    {
+        // Arrange
+        $endingPunctuations = ['#', '@', '='];
+        // Act
+        $sentences = static::$generator->sentences(endingPunctuation: $endingPunctuations);
+
+        // Assert
+        expect($sentences)
+            ->toBeArray()
+            ->each(fn ($word) => expect($word->value[-1])->toBeIn($endingPunctuations));
+    }
 }
