@@ -97,6 +97,7 @@ class Generator
             : $startingNGram ?? $this->weightedRandom($this->modelData['data']['first_elements']);
 
         $ngramElement = $this->modelData['data']['elements'][$ngram];
+        // Loop until n-gram element's children count OR last children count !== 0
         $loop = $ngramElement['c']['c'] !== 0 || $ngramElement['lc']['c'] !== 0;
         $word = $ngram;
 
