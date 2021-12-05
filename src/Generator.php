@@ -19,6 +19,33 @@ class Generator
 
     // region Private Validation Methods
 
+    /**
+     * @param  string|null  $startingNGram
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
+     */
+    private function checkStartingNGram(?string $startingNGram = null): void
+    {
+        if ($startingNGram !== null && mb_strlen($startingNGram) !== $this->modelData['config']['n_gram_size']) {
+            throw GeneratorException::invalidStartingNGramLength($this);
+        }
+    }
+
+    /**
+     * @param  int|null  $position
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
+     */
+    private function checkPosition(?int $position = null): void
+    {
+        if (
+            ($position === 0) ||
+            ($position !== null && abs($position) > $this->modelData['config']['number_of_sentence_elements'])
+        ) {
+            throw GeneratorException::invalidWordPosition($this);
+        }
+    }
+
     // endregion
 
     // region Public Methods
@@ -52,21 +79,15 @@ class Generator
         ?int $position = null,
         ?string $startingNGram = null,
     ): ?string {
-        if ($startingNGram !== null && mb_strlen($startingNGram) !== $this->modelData['config']['n']) {
-            throw GeneratorException::invalidStartingNGramLength($this);
-        }
+        $this->checkStartingNGram($startingNGram);
+        $this->checkPosition($position);
 
-        if (
-            ($position === 0) ||
-            ($position !== null && abs($position) > $this->modelData['config']['number_of_sentence_elements'])
-        ) {
-            throw GeneratorException::invalidWordPosition($this);
-        }
-
+        // Return null if there is no desired starting n-Gram
         if ($startingNGram !== null && ! isset($this->modelData['data']['elements'][$startingNGram])) {
             return null;
         }
 
+        // Set a weighted random length hint from model's word lengths data if not set
         if ($lengthHint === null) {
             $lengthHint = $this->weightedRandom($this->modelData['data']['word_lengths']);
         }
@@ -263,13 +284,13 @@ class Generator
         string $endingPunctuation = '.',
     ): string {
         $sentences = [];
-        $textLenght = 0;
+        $textLength = 0;
 
         do {
             $sentence = $this->sentence($this->weightedRandom($this->modelData['data']['word_lengths']));
-            $textLenght += mb_strlen($sentence);
+            $textLength += mb_strlen($sentence);
             $sentences[] = $sentence;
-        } while ($textLenght <= $maxNumberOfCharacters);
+        } while ($textLength <= $maxNumberOfCharacters);
 
         return substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - 1).$endingPunctuation;
     }
