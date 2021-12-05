@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Phonyland\LanguageGenerator\Tests;
 
-use RuntimeException;
+use Phonyland\LanguageGenerator\Exceptions\GeneratorException;
 
 class WordGeneratorTest extends BaseTestCase
 {
     /** @test */
     public function first_ngram_lenght_must_equal_to_n(): void
     {
-        $this->expectException(RuntimeException::class);
+        // Assert
+        $this->expectException(GeneratorException::class);
 
+        // Act
         static::$generator->word(
             lengthHint: 5,
             startingNGram: 'aaaaaaaaaa'
@@ -22,8 +24,10 @@ class WordGeneratorTest extends BaseTestCase
     /** @test */
     public function word_position_can_not_be_zero(): void
     {
-        $this->expectException(RuntimeException::class);
+        // Assert
+        $this->expectException(GeneratorException::class);
 
+        // Act
         static::$generator->word(
             lengthHint: 5,
             position: 0
