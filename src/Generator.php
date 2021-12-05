@@ -147,7 +147,11 @@ class Generator
 
         $words = [];
         for ($i = 0; $i < $numberOfWords; $i++) {
-            $words[] = $this->word($lengthHint, $position, $startingNGram);
+            $words[] = $this->word(
+                lengthHint: $lengthHint,
+                position: $position,
+                startingNGram: $startingNGram
+            );
         }
 
         return $words;
@@ -164,12 +168,16 @@ class Generator
      * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function sentence(
-        int $numberOfWords = 7,
+        ?int $numberOfWords = null,
         string $endingPunctuation = '.',
     ): string {
         $startingWords = [];
         $words = [];
         $endingWords = [];
+
+        if ($numberOfWords === null) {
+            $numberOfWords = $this->weightedRandom($this->modelData['data']['sentence_lengths']);
+        }
 
         // This phony language model has any sentence elements?
         if ($this->modelData['config']['number_of_sentence_elements'] > 0) {
