@@ -17,37 +17,6 @@ class Generator
 
     // endregion
 
-    // region Private Validation Methods
-
-    /**
-     * @param  string|null  $startingNGram
-     *
-     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
-     */
-    private function checkStartingNGram(?string $startingNGram = null): void
-    {
-        if ($startingNGram !== null && mb_strlen($startingNGram) !== $this->modelData['config']['n_gram_size']) {
-            throw GeneratorException::invalidStartingNGramLength($this);
-        }
-    }
-
-    /**
-     * @param  int|null  $position
-     *
-     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
-     */
-    private function checkPosition(?int $position = null): void
-    {
-        if (
-            ($position === 0) ||
-            ($position !== null && abs($position) > $this->modelData['config']['number_of_sentence_elements'])
-        ) {
-            throw GeneratorException::invalidWordPosition($this);
-        }
-    }
-
-    // endregion
-
     // region Public Methods
 
     /**
@@ -89,6 +58,37 @@ class Generator
         }
 
         return $elements['e'][$low];
+    }
+
+    // endregion
+
+    // region Private Validation Methods
+
+    /**
+     * @param  string|null  $startingNGram
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
+     */
+    private function checkStartingNGram(?string $startingNGram = null): void
+    {
+        if ($startingNGram !== null && mb_strlen($startingNGram) !== $this->modelData['config']['n_gram_size']) {
+            throw GeneratorException::invalidStartingNGramLength($this);
+        }
+    }
+
+    /**
+     * @param  int|null  $position
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
+     */
+    private function checkPosition(?int $position = null): void
+    {
+        if (
+            ($position === 0) ||
+            ($position !== null && abs($position) > $this->modelData['config']['number_of_sentence_elements'])
+        ) {
+            throw GeneratorException::invalidWordPosition($this);
+        }
     }
 
     // endregion
