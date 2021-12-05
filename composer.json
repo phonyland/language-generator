@@ -1,15 +1,15 @@
 {
     "name": "phonyland/language-generator",
-    "type": "library",
     "description": "\ud83c\udfd7 Language Generator for \ud83d\ude43 Phony Framework",
-    "homepage": "http://phony.land",
     "license": "MIT",
+    "type": "library",
     "authors": [
         {
             "name": "Yunus Emre Delig\u00f6z",
             "email": "ye@deligoz.me"
         }
     ],
+    "homepage": "http://phony.land",
     "require": {
         "php": "^8.1",
         "phonyland/language-model": "dev-master"
@@ -17,9 +17,8 @@
     "require-dev": {
         "phonyland/dev-tools": "dev-master"
     },
-    "config": {
-        "sort-packages": true
-    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Phonyland\\LanguageGenerator\\": "src/"
@@ -30,8 +29,9 @@
             "Phonyland\\LanguageGenerator\\Tests\\": "tests"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
     "scripts": {
         "post-autoload-dump": [
             "@normalize",
