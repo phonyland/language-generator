@@ -21,11 +21,22 @@ class SentenceGeneratorTest extends BaseTestCase
     public function it_can_generate_a_sentence_with_desired_number_of_words(): void
     {
         // Act
-        $words = static::$generator->sentence(numberOfWords: 10);
+        $sentence = static::$generator->sentence(numberOfWords: 10);
 
         // Assert
-        expect(explode(' ', $words))
+        expect(explode(' ', $sentence))
             ->toHaveCount(10)
             ->each()->toBeString();
+    }
+
+    /** @test */
+    public function it_can_generate_a_sentence_with_desired_ending_punctuation(): void
+    {
+        // Act
+        $sentence = static::$generator->sentence(endingPunctuation: '?');
+
+        // Assert
+        expect($sentence[-1])
+            ->toBe('?');
     }
 }
