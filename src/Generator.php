@@ -11,7 +11,7 @@ class Generator
     // region Attributes
 
     /** @var array<mixed> */
-    protected array $modelData;
+    public array $modelData;
 
     public int $seed;
 
