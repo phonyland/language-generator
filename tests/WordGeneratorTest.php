@@ -35,6 +35,19 @@ class WordGeneratorTest extends BaseTestCase
     }
 
     /** @test */
+    public function positions_outside_of_the_model_are_not_allowed(): void
+    {
+        // Assert
+        $this->expectException(GeneratorException::class);
+
+        // Act
+        static::$generator->word(
+            lengthHint: 5,
+            position: static::$generator->modelData['config']['number_of_sentence_elements'] + 1
+        );
+    }
+
+    /** @test */
     public function it_returns_null_for_a_non_existing_first_ngram(): void
     {
         // Act
