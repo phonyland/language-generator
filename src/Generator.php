@@ -17,6 +17,10 @@ class Generator
 
     // endregion
 
+    // region Private Validation Methods
+
+    // endregion
+
     // region Public Methods
 
     /**
@@ -49,7 +53,7 @@ class Generator
         ?string $startingNGram = null,
     ): ?string {
         if ($startingNGram !== null && mb_strlen($startingNGram) !== $this->modelData['config']['n']) {
-            throw GeneratorException::invalidNGramLength($this);
+            throw GeneratorException::invalidStartingNGramLength($this);
         }
 
         if (

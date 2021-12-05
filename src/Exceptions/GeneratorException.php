@@ -7,13 +7,23 @@ use Phonyland\LanguageGenerator\Generator;
 
 class GeneratorException extends Exception
 {
-    public static function invalidNGramLength(Generator $generator): self
+    /**
+     * @param  \Phonyland\LanguageGenerator\Generator  $generator
+     *
+     * @return static
+     */
+    public static function invalidStartingNGramLength(Generator $generator): self
     {
         return new static(
             message: "First n-Gram lenght must equal to {$generator->modelData['config']['n']} for this model."
         );
     }
 
+    /**
+     * @param  \Phonyland\LanguageGenerator\Generator  $generator
+     *
+     * @return static
+     */
     public static function invalidWordPosition(Generator $generator): self
     {
         $numberOfSentenceElements = $generator->modelData['config']['number_of_sentence_elements'];
