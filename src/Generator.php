@@ -64,6 +64,38 @@ class Generator
     }
 
     /**
+     * @param  array<mixed>  $elements
+     *
+     * @return string|int
+     */
+    public function weightedRandom(array & $elements): string|int
+    {
+        $randomWeight = mt_rand(0, $elements['sw']);
+
+        $low = 0;
+        $high = $elements['c'] - 1;
+
+        while ($low <= $high) {
+            $probe = (int) (($low + $high) / 2);
+            $midValue = $elements['cw'][$probe];
+
+            if ($midValue < $randomWeight) {
+                $low = $probe + 1;
+            } elseif ($midValue > $randomWeight) {
+                $high = $probe - 1;
+            } else {
+                return $elements['e'][$probe];
+            }
+        }
+
+        return $elements['e'][$low];
+    }
+
+    // endregion
+
+    // region Public Generation Methods
+
+    /**
      * Generates a word.
      *
      * @param  int|null     $lengthHint
@@ -307,38 +339,6 @@ class Generator
         } while ($textLength <= $maxNumberOfCharacters);
 
         return substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - 1).$endingPunctuation;
-    }
-
-    // endregion
-
-    // region Protected Methods
-
-    /**
-     * @param  array<mixed>  $elements
-     *
-     * @return string|int
-     */
-    public function weightedRandom(array & $elements): string|int
-    {
-        $randomWeight = mt_rand(0, $elements['sw']);
-
-        $low = 0;
-        $high = $elements['c'] - 1;
-
-        while ($low <= $high) {
-            $probe = (int) (($low + $high) / 2);
-            $midValue = $elements['cw'][$probe];
-
-            if ($midValue < $randomWeight) {
-                $low = $probe + 1;
-            } elseif ($midValue > $randomWeight) {
-                $high = $probe - 1;
-            } else {
-                return $elements['e'][$probe];
-            }
-        }
-
-        return $elements['e'][$low];
     }
 
     // endregion
