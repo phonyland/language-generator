@@ -22,12 +22,12 @@ class BaseTestCase extends TestCase
 
         if (static::$generator === null) {
             $model = new Model('Test Model');
-            $model->config
-                ->n(static::$n)
-                ->minLenght(3)
+            $model
+                ->config
+                ->nGramSize(static::$n)
+                ->minWordLength(3)
                 ->unique(false)
                 ->excludeOriginals(true)
-                ->frequencyPrecision(7)
                 ->numberOfSentenceElements(3)
                 ->tokenizer(
                     (new Tokenizer())

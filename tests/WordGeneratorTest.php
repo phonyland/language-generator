@@ -9,7 +9,7 @@ use Phonyland\LanguageGenerator\Exceptions\GeneratorException;
 class WordGeneratorTest extends BaseTestCase
 {
     /** @test */
-    public function first_ngram_lenght_must_equal_to_n(): void
+    public function first_ngram_length_must_equal_to_n(): void
     {
         // Assert
         $this->expectException(GeneratorException::class);

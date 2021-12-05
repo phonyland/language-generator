@@ -15,7 +15,7 @@ class GeneratorException extends Exception
     public static function invalidStartingNGramLength(Generator $generator): self
     {
         return new static(
-            message: "First n-Gram lenght must equal to {$generator->modelData['config']['n']} for this model."
+            message: "First n-Gram length must equal to {$generator->modelData['config']['n_gram_size']} for this model."
         );
     }
 
