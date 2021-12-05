@@ -58,13 +58,14 @@ class WordGeneratorTest extends BaseTestCase
     }
 
     /** @test */
-    public function word_length_hint_will_be_the_n_if_not_set(): void
+    public function word_length_hint_will_a_weighted_random_length_of_the_word_lengths_of_the_model(): void
     {
         // Act
         $word = static::$generator->word();
 
         // Assert
-        expect(mb_strlen($word))->toBeGreaterThanOrEqual(expected: static::$n);
+        expect(mb_strlen($word))
+            ->toBeIn(static::$generator->modelData['data']['word_lengths']['i']);
     }
 
     /** @test */
