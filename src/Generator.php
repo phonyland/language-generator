@@ -223,10 +223,15 @@ class Generator
      * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function sentences(
-        int $numberOfSentences = 7,
+        ?int $numberOfSentences = null,
         string $endingPunctuation = '.',
     ): array {
         $sentences = [];
+
+        // There is no paragraph lenghts data yet. So we'll just use the sentence length data.
+        if ($numberOfSentences === null) {
+            $numberOfSentences = $this->weightedRandom($this->modelData['data']['sentence_lengths']);
+        }
 
         for ($i = 0; $i < $numberOfSentences; $i++) {
             $sentences[] = $this->sentence(
