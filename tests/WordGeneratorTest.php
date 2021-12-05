@@ -8,6 +8,8 @@ use Phonyland\LanguageGenerator\Exceptions\GeneratorException;
 
 class WordGeneratorTest extends BaseTestCase
 {
+    // region Validations
+
     /** @test */
     public function first_ngram_length_must_equal_to_n(): void
     {
@@ -46,6 +48,8 @@ class WordGeneratorTest extends BaseTestCase
             position: static::$generator->modelData['config']['number_of_sentence_elements'] + 1
         );
     }
+
+    // endregion
 
     /** @test */
     public function it_returns_null_for_a_non_existing_first_ngram(): void
