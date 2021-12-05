@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Phonyland\LanguageGenerator;
 
-use RuntimeException;
+use Phonyland\LanguageGenerator\Exceptions\GeneratorException;
 
 class Generator
 {
@@ -40,6 +40,8 @@ class Generator
      * @param  string|null  $startingNGram
      *
      * @return string|null
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function word(
         ?int $lengthHint = null,
@@ -47,16 +49,14 @@ class Generator
         ?string $startingNGram = null,
     ): ?string {
         if ($startingNGram !== null && mb_strlen($startingNGram) !== $this->modelData['config']['n']) {
-            throw new RuntimeException("First n-Gram lenght must equal to {$this->modelData['config']['n']} for this model.");
+            throw GeneratorException::invalidNGramLength($this);
         }
 
-        if ($position === 0) {
-            throw new RuntimeException('Position can not be zero.');
-        }
-
-        if ($position !== null && abs($position) > $this->modelData['config']['number_of_sentence_elements']) {
-            $numberOfSentenceElements = $this->modelData['config']['number_of_sentence_elements'];
-            throw new RuntimeException("Position must be >=-$numberOfSentenceElements or <=+$numberOfSentenceElements.");
+        if (
+            ($position === 0) ||
+            ($position !== null && abs($position) > $this->modelData['config']['number_of_sentence_elements'])
+        ) {
+            throw GeneratorException::invalidWordPosition($this);
         }
 
         if ($startingNGram !== null && ! isset($this->modelData['data']['elements'][$startingNGram])) {
@@ -100,21 +100,26 @@ class Generator
     /**
      * Generates multiple words.
      *
-     * @param  int          $numberOfWords
-     * @param  int          $lengthHint
+     * @param  int|null     $numberOfWords
+     * @param  int|null     $lengthHint
      * @param  int|null     $position
      * @param  string|null  $startingNGram
      *
      * @return array<string>
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function words(
-        int $numberOfWords,
-        int $lengthHint,
+        ?int $numberOfWords = null,
+        ?int $lengthHint = null,
         ?int $position = null,
         ?string $startingNGram = null,
     ): array {
-        $words = [];
+        if ($numberOfWords === null) {
+            $numberOfWords = $this->weightedRandom($this->modelData['data']['sentence_lengths']);
+        }
 
+        $words = [];
         for ($i = 0; $i < $numberOfWords; $i++) {
             $words[] = $this->word($lengthHint, $position, $startingNGram);
         }
@@ -129,6 +134,8 @@ class Generator
      * @param  string  $endingPunctuation
      *
      * @return string
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function sentence(
         int $numberOfWords = 7,
@@ -178,6 +185,8 @@ class Generator
      * @param  string  $endingPunctuation
      *
      * @return array<string>
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function sentences(
         int $numberOfSentences = 7,
@@ -202,6 +211,8 @@ class Generator
      * @param  string  $endingPunctuation
      *
      * @return string
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function paragraph(
         int $numberOfSentences = 7,
@@ -217,6 +228,8 @@ class Generator
      * @param  int  $numberOfSentences
      *
      * @return array<string>
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function paragraphs(
         int $numberOfParagraphs = 3,
@@ -238,6 +251,8 @@ class Generator
      * @param  string  $endingPunctuation
      *
      * @return string
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function text(
         int $maxNumberOfCharacters,
