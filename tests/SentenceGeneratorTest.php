@@ -9,8 +9,23 @@ class SentenceGeneratorTest extends BaseTestCase
     /** @test */
     public function it_can_generate_a_sentence(): void
     {
-        $words = static::$generator->sentence(10);
+        // Act
+        $sentence = static::$generator->sentence();
 
-        expect(explode(' ', $words))->toHaveCount(10);
+        // Assert
+        expect(explode(' ', $sentence))
+            ->each()->toBeString();
+    }
+
+    /** @test */
+    public function it_can_generate_a_sentence_with_desired_number_of_words(): void
+    {
+        // Act
+        $words = static::$generator->sentence(numberOfWords: 10);
+
+        // Assert
+        expect(explode(' ', $words))
+            ->toHaveCount(10)
+            ->each()->toBeString();
     }
 }
