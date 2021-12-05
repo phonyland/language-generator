@@ -44,19 +44,18 @@ class WordsGeneratorTest extends BaseTestCase
     }
 
     /** @test */
-    public function it_can_generate_desired_number_of_words_with_a_length_hint(): void
+    public function it_can_generate_multiple_words_from_desired_word_positions(): void
     {
         // Arrange
-        $numberOfWords = random_int(2, 10);
-        $lengthHint = static::$n;
+        $position = random_int(1, static::$generator->modelData['config']['number_of_sentence_elements']);
+        $position = random_int(0, 1) === 1 ? $position : -1 * $position;
 
         // Act
-        $words = static::$generator->words($numberOfWords, $lengthHint);
+        $words = static::$generator->words(position: $position);
 
         // Assert
         expect($words)
             ->toBeArray()
-            ->toHaveLength($numberOfWords)
-            ->each(fn ($word) => expect(mb_strlen($word->value))->toBeGreaterThanOrEqual($lengthHint));
+            ->each()->toBeString();
     }
 }
