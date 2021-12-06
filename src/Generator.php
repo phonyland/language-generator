@@ -291,8 +291,8 @@ class Generator
      * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function paragraph(
-        int $numberOfSentences = 7,
-        string $endingPunctuation = '.',
+        ?int $numberOfSentences = null,
+        null|string|array $endingPunctuation = null,
     ): string {
         return implode(' ', $this->sentences($numberOfSentences, $endingPunctuation));
     }
