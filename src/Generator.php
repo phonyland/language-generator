@@ -311,11 +311,12 @@ class Generator
     public function paragraphs(
         int $numberOfParagraphs = 3,
         int $numberOfSentences = 7,
+        null|string|array $endingPunctuation = null,
     ): array {
         $paragraphs = [];
 
         for ($i = 0; $i < $numberOfParagraphs; $i++) {
-            $paragraphs[] = $this->paragraph($numberOfSentences);
+            $paragraphs[] = $this->paragraph($numberOfSentences, $endingPunctuation);
         }
 
         return $paragraphs;
