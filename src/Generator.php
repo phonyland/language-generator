@@ -283,8 +283,8 @@ class Generator
     /**
      * Generates a paragraph.
      *
-     * @param  int     $numberOfSentences
-     * @param  string  $endingPunctuation
+     * @param  int|null           $numberOfSentences
+     * @param  string|array|null  $endingPunctuation
      *
      * @return string
      *
@@ -300,8 +300,9 @@ class Generator
     /**
      * * Generates multiple paragraphs.
      *
-     * @param  int  $numberOfParagraphs
-     * @param  int  $numberOfSentences
+     * @param  int|null           $numberOfParagraphs
+     * @param  int|null           $numberOfSentences
+     * @param  string|array|null  $endingPunctuation
      *
      * @return array<string>
      *
