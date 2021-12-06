@@ -309,11 +309,17 @@ class Generator
      * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function paragraphs(
-        int $numberOfParagraphs = 3,
-        int $numberOfSentences = 7,
+        ?int $numberOfParagraphs = null,
+        ?int $numberOfSentences = null,
         null|string|array $endingPunctuation = null,
     ): array {
         $paragraphs = [];
+
+        // There is no number of paragraphs data yet on Phony Language Models.
+        // So we'll just use the sentence length data.
+        if ($numberOfParagraphs === null) {
+            $numberOfParagraphs = $this->weightedRandom($this->modelData['data']['sentence_lengths']);
+        }
 
         for ($i = 0; $i < $numberOfParagraphs; $i++) {
             $paragraphs[] = $this->paragraph($numberOfSentences, $endingPunctuation);
