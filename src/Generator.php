@@ -201,7 +201,7 @@ class Generator
      */
     public function sentence(
         ?int $numberOfWords = null,
-        string $endingPunctuation = '.',
+        null|string|array $endingPunctuation = null,
     ): string {
         $startingWords = [];
         $words = [];
@@ -210,6 +210,14 @@ class Generator
         if ($numberOfWords === null) {
             $numberOfWords = $this->weightedRandom($this->modelData['data']['sentence_lengths']);
         }
+
+        if ($endingPunctuation === null) {
+            $endingPunctuation = ['.', '!', '?'];
+        }
+
+        $endingPunctuation = is_array($endingPunctuation)
+            ? $endingPunctuation[array_rand($endingPunctuation)]
+            : $endingPunctuation;
 
         // This phony language model has any sentence elements?
         if ($this->modelData['config']['number_of_sentence_elements'] > 0) {
