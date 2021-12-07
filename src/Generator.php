@@ -347,11 +347,17 @@ class Generator
      * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
     public function text(
-        int $maxNumberOfCharacters,
+        ?int $maxNumberOfCharacters = null,
         string $endingPunctuation = '.',
     ): string {
         $sentences = [];
         $textLength = 0;
+
+        // There is no text lenghts data yet on Phony Language Models.
+        // So we'll just use the sentence length data multiplied by 100.
+        if ($maxNumberOfCharacters === null) {
+            $maxNumberOfCharacters = 100 * $this->weightedRandom($this->modelData['data']['sentence_lengths']);
+        }
 
         do {
             $sentence = $this->sentence($this->weightedRandom($this->modelData['data']['word_lengths']));
