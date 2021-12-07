@@ -37,7 +37,7 @@ class Generator
      *
      * @return string|int
      */
-    public function weightedRandom(array & $elements): string|int
+    public function weightedRandom(array &$elements): string|int
     {
         $randomWeight = mt_rand(0, $elements['sw']);
 
@@ -192,8 +192,8 @@ class Generator
     /**
      * Generates a sentence.
      *
-     * @param  int     $numberOfWords
-     * @param  string  $endingPunctuation
+     * @param  int|null           $numberOfWords
+     * @param  string|array|null  $endingPunctuation
      *
      * @return string
      *
@@ -255,8 +255,8 @@ class Generator
     /**
      * Generates multiple sentences.
      *
-     * @param  int     $numberOfSentences
-     * @param  string  $endingPunctuation
+     * @param  int|null           $numberOfSentences
+     * @param  string|array|null  $endingPunctuation
      *
      * @return array<string>
      *
@@ -339,8 +339,8 @@ class Generator
     /**
      * Generates a text.
      *
-     * @param  int     $maxNumberOfCharacters
-     * @param  string  $endingPunctuation
+     * @param  int|null  $maxNumberOfCharacters
+     * @param  string    $endingPunctuation
      *
      * @return string
      *
