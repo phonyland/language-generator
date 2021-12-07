@@ -9,8 +9,23 @@ class TextGeneratorTest extends BaseTestCase
     /** @test */
     public function it_can_generate_a_text(): void
     {
-        $text = static::$generator->text(200);
+        // Act
+        $text = static::$generator->text();
+        
+        // Assert
+        expect($text)->toBeString();
+    }
 
-        expect($text)->toHaveLength(200);
+    /** @test */
+    public function it_can_generate_a_text_with_desired_number_of_characters(): void
+    {
+        // Arrange
+        $numberOfCharacters = random_int(100, 1000);
+
+        // Act
+        $text = static::$generator->text(maxNumberOfCharacters: $numberOfCharacters);
+
+        // Assert
+        expect($text)->toHaveLength($numberOfCharacters);
     }
 }
