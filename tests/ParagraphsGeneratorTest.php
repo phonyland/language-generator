@@ -9,10 +9,30 @@ class ParagraphsGeneratorTest extends BaseTestCase
     /** @test */
     public function it_can_generate_multiple_paragraphs(): void
     {
-        $paragraphs = static::$generator->paragraphs(3, 8);
+        // Act
+        $paragraphs = static::$generator->paragraphs();
 
+        // Assert
         expect($paragraphs)
             ->toBeArray()
-            ->toHaveLength(3);
+            ->each()->toBeString();
+    }
+
+    /** @test */
+    public function it_can_generate_desired_number_of_paragraphs(): void
+    {
+        // Arrange
+        $numberOfParagraphs = random_int(2, 10);
+
+        // Act
+        $paragraphs = static::$generator->paragraphs(numberOfParagraphs: $numberOfParagraphs);
+
+        // Assert
+        expect($paragraphs)
+            ->toBeArray()
+            ->toHaveCount($numberOfParagraphs)
+            ->each()->toBeString();
+    }
+
     }
 }
