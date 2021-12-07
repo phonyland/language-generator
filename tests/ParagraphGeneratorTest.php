@@ -28,16 +28,4 @@ class ParagraphGeneratorTest extends BaseTestCase
         // Assert
         expect(explode('# ', $paragraph))->toHaveCount(10);
     }
-
-    /** @test */
-    public function it_can_generate_a_paragraph_with_desired_ending_punctuations(): void
-    {
-        // Act
-        $paragraph = static::$generator->paragraph(endingPunctuation: '@');
-
-        // Assert
-        expect(explode('@ ', $paragraph))
-            ->toBeArray()
-            ->each()->toBeString();
-    }
 }
