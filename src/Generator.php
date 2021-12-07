@@ -348,7 +348,7 @@ class Generator
      */
     public function text(
         ?int $maxNumberOfCharacters = null,
-        string $endingPunctuation = '.',
+        null|string|array $sentenceEndingPunctuation = null,
     ): string {
         $sentences = [];
         $textLength = 0;
@@ -360,12 +360,16 @@ class Generator
         }
 
         do {
-            $sentence = $this->sentence($this->weightedRandom($this->modelData['data']['word_lengths']));
+            $sentence = $this->sentence(
+                numberOfWords: $this->weightedRandom($this->modelData['data']['word_lengths']),
+                endingPunctuation: $sentenceEndingPunctuation,
+            );
             $textLength += mb_strlen($sentence);
             $sentences[] = $sentence;
         } while ($textLength <= $maxNumberOfCharacters);
 
-        return substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - 1).$endingPunctuation;
+        return substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - 1).'#';
+    }
     }
 
     // endregion
