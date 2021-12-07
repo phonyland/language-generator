@@ -292,7 +292,7 @@ class Generator
      * Generates a paragraph.
      *
      * @param  int|null           $numberOfSentences
-     * @param  string|array|null  $endingPunctuation
+     * @param  string|array|null  $sentenceEndingPunctuation
      *
      * @return string
      *
@@ -300,9 +300,9 @@ class Generator
      */
     public function paragraph(
         ?int $numberOfSentences = null,
-        null|string|array $endingPunctuation = null,
+        null|string|array $sentenceEndingPunctuation = null,
     ): string {
-        return implode(' ', $this->sentences($numberOfSentences, $endingPunctuation));
+        return implode(' ', $this->sentences($numberOfSentences, $sentenceEndingPunctuation));
     }
 
     /**
