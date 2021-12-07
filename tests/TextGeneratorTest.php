@@ -11,7 +11,7 @@ class TextGeneratorTest extends BaseTestCase
     {
         // Act
         $text = static::$generator->text();
-        
+
         // Assert
         expect($text)->toBeString();
     }

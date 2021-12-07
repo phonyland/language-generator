@@ -49,6 +49,6 @@ class ParagraphsGeneratorTest extends BaseTestCase
         // Assert
         expect($paragraphs)
             ->toBeArray()
-            ->each(fn($paragraph) => expect(explode('# ', $paragraph->value))->toHaveCount($numberOfSentences));
+            ->each(fn ($paragraph) => expect(explode('# ', $paragraph->value))->toHaveCount($numberOfSentences));
     }
 }
