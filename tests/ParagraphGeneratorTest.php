@@ -22,7 +22,7 @@ class ParagraphGeneratorTest extends BaseTestCase
         // Act
         $paragraph = static::$generator->paragraph(
             numberOfSentences: 10,
-            endingPunctuation: '#',
+            sentenceEndingPunctuation: '#',
         );
 
         // Assert

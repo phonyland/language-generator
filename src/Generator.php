@@ -310,7 +310,7 @@ class Generator
      *
      * @param  int|null           $numberOfParagraphs
      * @param  int|null           $numberOfSentences
-     * @param  string|array|null  $endingPunctuation
+     * @param  string|array|null  $sentenceEndingPunctuation
      *
      * @return array<string>
      *
@@ -319,7 +319,7 @@ class Generator
     public function paragraphs(
         ?int $numberOfParagraphs = null,
         ?int $numberOfSentences = null,
-        null|string|array $endingPunctuation = null,
+        null|string|array $sentenceEndingPunctuation = null,
     ): array {
         $paragraphs = [];
 
@@ -330,7 +330,7 @@ class Generator
         }
 
         for ($i = 0; $i < $numberOfParagraphs; $i++) {
-            $paragraphs[] = $this->paragraph($numberOfSentences, $endingPunctuation);
+            $paragraphs[] = $this->paragraph($numberOfSentences, $sentenceEndingPunctuation);
         }
 
         return $paragraphs;
