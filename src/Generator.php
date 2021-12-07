@@ -339,8 +339,9 @@ class Generator
     /**
      * Generates a text.
      *
-     * @param  int|null  $maxNumberOfCharacters
-     * @param  string    $endingPunctuation
+     * @param  int|null           $maxNumberOfCharacters
+     * @param  string|array|null  $sentenceEndingPunctuation
+     * @param  string|null        $suffix
      *
      * @return string
      *
@@ -371,7 +372,7 @@ class Generator
 
         return $suffix === null
             ? substr(implode(' ', $sentences), 0, $maxNumberOfCharacters)
-            : substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - mb_strlen($suffix)) . $suffix;
+            : substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - mb_strlen($suffix)).$suffix;
     }
     }
 

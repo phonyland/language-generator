@@ -35,7 +35,7 @@ class ParagraphsGeneratorTest extends BaseTestCase
     }
 
     /** @test */
-    public function it_can_generate_multipe_paragraphs_with_desired_number_of_sentences_and_ending_punctuations(): void
+    public function it_can_generate_multipe_paragraphs_with_desired_number_of_sentences_and_sentence_ending_punctuations(): void
     {
         // Arrange
         $numberOfSentences = random_int(2, 10);
