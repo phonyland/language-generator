@@ -349,6 +349,7 @@ class Generator
     public function text(
         ?int $maxNumberOfCharacters = null,
         null|string|array $sentenceEndingPunctuation = null,
+        ?string $suffix = null,
     ): string {
         $sentences = [];
         $textLength = 0;
@@ -368,7 +369,9 @@ class Generator
             $sentences[] = $sentence;
         } while ($textLength <= $maxNumberOfCharacters);
 
-        return substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - 1).'#';
+        return $suffix === null
+            ? substr(implode(' ', $sentences), 0, $maxNumberOfCharacters)
+            : substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - mb_strlen($suffix)) . $suffix;
     }
     }
 
