@@ -19,7 +19,7 @@ class WordGeneratorTest extends BaseTestCase
         // Act
         static::$generator->word(
             lengthHint: 5,
-            startingNGram: 'aaaaaaaaaa'
+            startsWith: 'aaaaaaaaaa'
         );
     }
 
@@ -57,7 +57,7 @@ class WordGeneratorTest extends BaseTestCase
         // Act
         $word = static::$generator->word(
             lengthHint: 5,
-            startingNGram: 'xxx',
+            startsWith: 'xxx',
         );
 
         // Assert
@@ -101,7 +101,7 @@ class WordGeneratorTest extends BaseTestCase
         // Act
         $word = static::$generator->word(
             lengthHint: 5,
-            startingNGram: 'the'
+            startsWith: 'the'
         );
 
         // Assert

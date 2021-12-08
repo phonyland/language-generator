@@ -100,7 +100,7 @@ class Generator
      *
      * @param  int|null     $lengthHint
      * @param  int|null     $position
-     * @param  string|null  $startingNGram
+     * @param  string|null  $startsWith
      *
      * @return string|null
      *
@@ -109,15 +109,15 @@ class Generator
     public function word(
         ?int $lengthHint = null,
         ?int $position = null,
-        ?string $startingNGram = null,
+        ?string $startsWith = null,
     ): ?string {
-        $this->checkStartingNGram($startingNGram);
+        $this->checkStartingNGram($startsWith);
         $this->checkPosition($position);
 
-        if ($startingNGram !== null) {
+        if ($startsWith !== null) {
             $foundNGrams = array_filter(
                 array: $this->modelData['data']['elements'],
-                callback: static fn ($key) => str_starts_with($key, $startingNGram),
+                callback: static fn ($key) => str_starts_with($key, $startsWith),
                 mode: ARRAY_FILTER_USE_KEY
             );
 
@@ -126,7 +126,7 @@ class Generator
                 return null;
             }
 
-            $startingNGram = array_rand($foundNGrams);
+            $startsWith = array_rand($foundNGrams);
         }
 
         // Set a weighted random length hint from model's word lengths data if not set
@@ -136,7 +136,7 @@ class Generator
 
         $ngram = $position !== null
             ? $this->weightedRandom($this->modelData['data']['sentence_elements'][$position])
-            : $startingNGram ?? $this->weightedRandom($this->modelData['data']['first_elements']);
+            : $startsWith ?? $this->weightedRandom($this->modelData['data']['first_elements']);
 
         $ngramElement = $this->modelData['data']['elements'][$ngram];
         // Loop until n-gram element's children count OR last children count !== 0
@@ -192,7 +192,7 @@ class Generator
             $words[] = $this->word(
                 lengthHint: $lengthHint,
                 position: $position,
-                startingNGram: $startingNGram
+                startsWith: $startingNGram
             );
         }
 
