@@ -71,7 +71,7 @@ class Generator
      */
     private function checkStartingNGram(?string $startingNGram = null): void
     {
-        if ($startingNGram !== null && mb_strlen($startingNGram) !== $this->modelData['config']['n_gram_size']) {
+        if ($startingNGram !== null && mb_strlen($startingNGram) > $this->modelData['config']['n_gram_size']) {
             throw GeneratorException::invalidStartingNGramLength($this);
         }
     }
@@ -114,9 +114,19 @@ class Generator
         $this->checkStartingNGram($startingNGram);
         $this->checkPosition($position);
 
-        // Return null if there is no desired starting n-Gram
-        if ($startingNGram !== null && ! isset($this->modelData['data']['elements'][$startingNGram])) {
-            return null;
+        if ($startingNGram !== null) {
+            $foundNGrams = array_filter(
+                array: $this->modelData['data']['elements'],
+                callback: static fn ($key) => str_starts_with($key, $startingNGram),
+                mode: ARRAY_FILTER_USE_KEY
+            );
+
+            // Return null if there is no desired starting n-Gram
+            if (empty($foundNGrams)) {
+                return null;
+            }
+
+            $startingNGram = array_rand($foundNGrams);
         }
 
         // Set a weighted random length hint from model's word lengths data if not set
