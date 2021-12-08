@@ -66,7 +66,7 @@ class WordsGeneratorTest extends BaseTestCase
     public function it_can_generate_multiple_words_starting_with_a_desired_n_gram(): void
     {
         // Act
-        $words = static::$generator->words(startingNGram: 'ali');
+        $words = static::$generator->words(startsWith: 'ali');
 
         // Assert
         expect($words)

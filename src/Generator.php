@@ -171,7 +171,7 @@ class Generator
      * @param  int|null     $numberOfWords
      * @param  int|null     $lengthHint
      * @param  int|null     $position
-     * @param  string|null  $startingNGram
+     * @param  string|null  $startsWith
      *
      * @return array<string>
      *
@@ -181,7 +181,7 @@ class Generator
         ?int $numberOfWords = null,
         ?int $lengthHint = null,
         ?int $position = null,
-        ?string $startingNGram = null,
+        ?string $startsWith = null,
     ): array {
         if ($numberOfWords === null) {
             $numberOfWords = $this->weightedRandom($this->modelData['data']['sentence_lengths']);
@@ -192,7 +192,7 @@ class Generator
             $words[] = $this->word(
                 lengthHint: $lengthHint,
                 position: $position,
-                startsWith: $startingNGram
+                startsWith: $startsWith
             );
         }
 
