@@ -125,7 +125,7 @@ class Generator
             );
 
             // Return null if there is no desired starting n-Gram
-            if (empty($foundNGrams)) {
+            if ($foundNGrams === []) {
                 return null;
             }
 
@@ -207,9 +207,9 @@ class Generator
     /**
      * Generates a sentence.
      *
-     * @param  int|null           $numberOfWords
-     * @param  string|null        $startsWith
-     * @param  string|array|null  $endingPunctuation
+     * @param  int|null                   $numberOfWords
+     * @param  string|null                $startsWith
+     * @param  string|array<string>|null  $endingPunctuation
      *
      * @return string
      *
@@ -262,7 +262,7 @@ class Generator
         for ($i = 0; $i < $numberOfWords; $i++) {
             $words[] = $this->word(
                 lengthHint: $this->weightedRandom($this->modelData['data']['word_lengths']),
-                startsWith: $i === 0 & empty($startingWords) ? $startsWith : null,
+                startsWith: ($i === 0 && $startingWords === []) ? $startsWith : null,
             );
         }
 
@@ -274,9 +274,9 @@ class Generator
     /**
      * Generates multiple sentences.
      *
-     * @param  int|null           $numberOfSentences
-     * @param  string|null        $startsWith
-     * @param  string|array|null  $endingPunctuation
+     * @param  int|null                   $numberOfSentences
+     * @param  string|null                $startsWith
+     * @param  string|array<string>|null  $endingPunctuation
      *
      * @return array<string>
      *
@@ -313,8 +313,8 @@ class Generator
     /**
      * Generates a paragraph.
      *
-     * @param  int|null           $numberOfSentences
-     * @param  string|array|null  $sentenceEndingPunctuation
+     * @param  int|null                   $numberOfSentences
+     * @param  string|array<string>|null  $sentenceEndingPunctuation
      *
      * @return string
      *
@@ -336,9 +336,9 @@ class Generator
     /**
      * * Generates multiple paragraphs.
      *
-     * @param  int|null           $numberOfParagraphs
-     * @param  int|null           $numberOfSentences
-     * @param  string|array|null  $sentenceEndingPunctuation
+     * @param  int|null                   $numberOfParagraphs
+     * @param  int|null                   $numberOfSentences
+     * @param  string|array<string>|null  $sentenceEndingPunctuation
      *
      * @return array<string>
      *
@@ -370,9 +370,9 @@ class Generator
     /**
      * Generates a text.
      *
-     * @param  int|null           $maxNumberOfCharacters
-     * @param  string|array|null  $sentenceEndingPunctuation
-     * @param  string|null        $suffix
+     * @param  int|null                   $maxNumberOfCharacters
+     * @param  string|array<string>|null  $sentenceEndingPunctuation
+     * @param  string|null                $suffix
      *
      * @return string
      *
@@ -409,10 +409,10 @@ class Generator
     /**
      * Generate a poem.
      *
-     * @param  int|null           $numberOfVerses
-     * @param  int|null           $stanzaLength
-     * @param  int|null           $maximumNumberOfWords
-     * @param  string|array|null  $endingPunctuation
+     * @param  int|null                   $numberOfVerses
+     * @param  int|null                   $stanzaLength
+     * @param  int|null                   $maximumNumberOfWords
+     * @param  string|array<string>|null  $endingPunctuation
      *
      * @return string
      *
@@ -458,9 +458,9 @@ class Generator
     /**
      * Generates an acrostic poem.
      *
-     * @param  string             $initials
-     * @param  int|null           $maximumNumberOfWords
-     * @param  string|array|null  $endingPunctuation
+     * @param  string                     $initials
+     * @param  int|null                   $maximumNumberOfWords
+     * @param  string|array<string>|null  $endingPunctuation
      *
      * @return string
      *

@@ -5,7 +5,7 @@ namespace Phonyland\LanguageGenerator\Exceptions;
 use Exception;
 use Phonyland\LanguageGenerator\Generator;
 
-class GeneratorException extends Exception
+final class GeneratorException extends Exception
 {
     /**
      * @param  \Phonyland\LanguageGenerator\Generator  $generator
