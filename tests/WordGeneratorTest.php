@@ -119,4 +119,14 @@ class WordGeneratorTest extends BaseTestCase
         // Assert
         expect($word)->toStartWith('si');
     }
+
+    /** @test */
+    public function it_returns_null_if_there_is_no_words_that_starts_with_the_desired_string(): void
+    {
+        // Act
+        $word = static::$generator->word(startsWith: 'zzz');
+
+        // Assert
+        expect($word)->toBeNull();
+    }
 }
