@@ -356,7 +356,10 @@ class Generator
         }
 
         for ($i = 0; $i < $numberOfParagraphs; $i++) {
-            $paragraphs[] = $this->paragraph($numberOfSentences, $sentenceEndingPunctuation);
+            $paragraphs[] = $this->paragraph(
+                numberOfSentences: $numberOfSentences,
+                sentenceEndingPunctuation: $sentenceEndingPunctuation,
+            );
         }
 
         return $paragraphs;
