@@ -91,8 +91,7 @@ class WordGeneratorTest extends BaseTestCase
         $word = static::$generator->word();
 
         // Assert
-        expect(mb_strlen($word))
-            ->toBeIn(static::$generator->modelData['data']['word_lengths']['i']);
+        expect(mb_strlen($word))->toBeIn(static::$generator->modelData['data']['word_lengths']['i']);
     }
 
     /** @test */
