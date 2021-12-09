@@ -403,6 +403,55 @@ class Generator
             ? substr(implode(' ', $sentences), 0, $maxNumberOfCharacters)
             : substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - mb_strlen($suffix)).$suffix;
     }
+
+    /**
+     * Generate a poem.
+     *
+     * @param  int|null           $numberOfVerses
+     * @param  int|null           $stanzaLength
+     * @param  int|null           $maximumNumberOfWords
+     * @param  string|array|null  $endingPunctuation
+     *
+     * @return string
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
+     */
+    public function poem(
+        ?int $numberOfVerses = null,
+        ?int $stanzaLength = null,
+        ?int $maximumNumberOfWords = null,
+        null|string|array $endingPunctuation = null,
+    ): string {
+        if ($numberOfVerses === null) {
+            // we'll just use the sentence length data if number of verses is null.
+            $numberOfVerses = $this->weightedRandom($this->modelData['data']['sentence_lengths']);
+        }
+
+        if ($stanzaLength === null) {
+            // we'll just use the sentence length data if stanza length is null.
+            $stanzaLength = $this->weightedRandom($this->modelData['data']['word_lengths']);
+        }
+
+        if ($maximumNumberOfWords === null) {
+            // we'll just use the sentence length data if maximum number of words is null.
+            $maximumNumberOfWords = $this->weightedRandom($this->modelData['data']['word_lengths']);
+        }
+
+        $verses = [];
+
+        for ($i = 0; $i < $numberOfVerses; $i++) {
+            $verses[] = $this->sentence(
+                numberOfWords: $maximumNumberOfWords,
+                endingPunctuation: $endingPunctuation
+            );
+
+            if ($stanzaLength !== 0 && $i > 0 && ($i + 1) % $stanzaLength === 0) {
+                $verses[] = null;
+            }
+        }
+
+        return implode(PHP_EOL, $verses);
+    }
     }
 
     // endregion
