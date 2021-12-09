@@ -63,14 +63,14 @@ class WordsGeneratorTest extends BaseTestCase
     }
 
     /** @test */
-    public function it_can_generate_multiple_words_starting_with_a_desired_n_gram(): void
+    public function it_can_generate_multiple_words_starting_with_a_desired_string(): void
     {
         // Act
-        $words = static::$generator->words(startsWith: 'ali');
+        $words = static::$generator->words(startsWith: 'al');
 
         // Assert
         expect($words)
             ->toBeArray()
-            ->each()->toBeString();
+            ->each()->toStartWith('al');
     }
 }
