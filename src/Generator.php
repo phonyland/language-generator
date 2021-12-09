@@ -452,6 +452,44 @@ class Generator
 
         return implode(PHP_EOL, $verses);
     }
+
+    /**
+     * Generates an acrostic poem.
+     *
+     * @param  string             $initials
+     * @param  int|null           $maximumNumberOfWords
+     * @param  string|array|null  $endingPunctuation
+     *
+     * @return string
+     *
+     * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
+     */
+    public function acrosticPoem(
+        string $initials,
+        ?int $maximumNumberOfWords = null,
+        null|string|array $endingPunctuation = null,
+    ): string {
+        if ($maximumNumberOfWords === null) {
+            // we'll just use the sentence length data if maximum number of words is null.
+            $maximumNumberOfWords = $this->weightedRandom($this->modelData['data']['word_lengths']);
+        }
+
+        $verses = [];
+
+        foreach (mb_str_split($initials) as $initial) {
+            if ($initial === ' ') {
+                $verses[] = null;
+                continue;
+            }
+
+            $verses[] = $this->sentence(
+                numberOfWords: $maximumNumberOfWords,
+                startsWith: $initial,
+                endingPunctuation: $endingPunctuation,
+            );
+        }
+
+        return implode(PHP_EOL, $verses);
     }
 
     // endregion
