@@ -12,7 +12,7 @@ class GeneratorException extends Exception
      *
      * @return static
      */
-    public static function invalidStartingNGramLength(Generator $generator): self
+    public static function invalidStartString(Generator $generator): self
     {
         return new static(
             message: "First n-Gram length must be less than and equal to {$generator->modelData['config']['n_gram_size']} for this model."

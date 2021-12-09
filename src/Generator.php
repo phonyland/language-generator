@@ -65,14 +65,14 @@ class Generator
     // region Private Validation Methods
 
     /**
-     * @param  string|null  $startingNGram
+     * @param  string|null  $startsWith
      *
      * @throws \Phonyland\LanguageGenerator\Exceptions\GeneratorException
      */
-    private function checkStartingNGram(?string $startingNGram = null): void
+    private function checkStartsWith(?string $startsWith = null): void
     {
-        if ($startingNGram !== null && mb_strlen($startingNGram) > $this->modelData['config']['n_gram_size']) {
-            throw GeneratorException::invalidStartingNGramLength($this);
+        if ($startsWith !== null && mb_strlen($startsWith) > $this->modelData['config']['n_gram_size']) {
+            throw GeneratorException::invalidStartString($this);
         }
     }
 
@@ -111,32 +111,35 @@ class Generator
         ?int $position = null,
         ?string $startsWith = null,
     ): ?string {
-        $this->checkStartingNGram($startsWith);
+        $this->checkStartsWith($startsWith);
         $this->checkPosition($position);
+
+        $ngram = null;
 
         if ($startsWith !== null) {
             $foundNGrams = array_filter(
-                array: $this->modelData['data']['elements'],
+                array: $position !== null
+                    ? $this->modelData['data']['sentence_elements'][$position]['e']
+                    : $this->modelData['data']['first_elements']['e'],
                 callback: static fn ($key) => str_starts_with($key, $startsWith),
-                mode: ARRAY_FILTER_USE_KEY
             );
 
             // Return null if there is no desired starting n-Gram
-            if (empty($foundNGrams)) {
-                return null;
-            }
+            if (empty($foundNGrams)) { return null; }
 
-            $startsWith = array_rand($foundNGrams);
+            $ngram = $foundNGrams[array_rand($foundNGrams)];
+        }
+
+        if ($ngram === null) {
+            $ngram = ($position === null)
+                ? $this->weightedRandom($this->modelData['data']['first_elements'])
+                : $this->weightedRandom($this->modelData['data']['sentence_elements'][$position]);
         }
 
         // Set a weighted random length hint from model's word lengths data if not set
         if ($lengthHint === null) {
             $lengthHint = $this->weightedRandom($this->modelData['data']['word_lengths']);
         }
-
-        $ngram = $position !== null
-            ? $this->weightedRandom($this->modelData['data']['sentence_elements'][$position])
-            : $startsWith ?? $this->weightedRandom($this->modelData['data']['first_elements']);
 
         $ngramElement = $this->modelData['data']['elements'][$ngram];
         // Loop until n-gram element's children count OR last children count !== 0
