@@ -39,4 +39,14 @@ class SentenceGeneratorTest extends BaseTestCase
         expect($sentence[-1])
             ->toBe('?');
     }
+
+    /** @test */
+    public function it_can_generate_a_sentence_with_desired_starting_string(): void
+    {
+        // Act
+        $sentence = static::$generator->sentence(startsWith: 'em');
+
+        // Assert
+        expect($sentence)->toStartWith('Em');
+    }
 }
