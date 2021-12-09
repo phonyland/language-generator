@@ -15,4 +15,22 @@ class PoemGeneratorTest extends BaseTestCase
         // Assert
         expect($poem)->toBeString();
     }
+
+    /** @test */
+    public function it_can_generate_a_poem_with_desired_number_of_verses(): void
+    {
+        // Arrange
+        $numberOfVerses = random_int(10, 20);
+
+        // Act
+        $poem = static::$generator->poem(
+            numberOfVerses: $numberOfVerses,
+            stanzaLength: 0,
+        );
+
+        // Assert
+        expect(explode(PHP_EOL, $poem))
+            ->toHaveCount($numberOfVerses)
+            ->each()->toBeString();
+    }
 }
