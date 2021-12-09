@@ -273,6 +273,7 @@ class Generator
      * Generates multiple sentences.
      *
      * @param  int|null           $numberOfSentences
+     * @param  string|null        $startsWith
      * @param  string|array|null  $endingPunctuation
      *
      * @return array<string>
@@ -281,6 +282,7 @@ class Generator
      */
     public function sentences(
         ?int $numberOfSentences = null,
+        ?string $startsWith = null,
         null|string|array $endingPunctuation = null,
     ): array {
         $sentences = [];
@@ -298,6 +300,7 @@ class Generator
         for ($i = 0; $i < $numberOfSentences; $i++) {
             $sentences[] = $this->sentence(
                 numberOfWords: $this->weightedRandom($this->modelData['data']['sentence_lengths']),
+                startsWith: $startsWith,
                 endingPunctuation: is_array($endingPunctuation) ? $endingPunctuation[array_rand($endingPunctuation)] : $endingPunctuation,
             );
         }

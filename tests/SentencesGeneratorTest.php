@@ -43,4 +43,20 @@ class SentencesGeneratorTest extends BaseTestCase
             ->toBeArray()
             ->each(fn ($word) => expect($word->value[-1])->toBeIn($endingPunctuations));
     }
+
+    /** @test */
+    public function it_can_generate_multiple_sentences_with_a_desired_starting_string(): void
+    {
+        // Act
+        $sentences = static::$generator->sentences(
+            numberOfSentences: 10,
+            startsWith: 'si',
+        );
+
+        // Assert
+        expect($sentences)
+            ->toBeArray()
+            ->toHaveLength(10)
+            ->each()->toStartWith('Si');
+    }
 }
