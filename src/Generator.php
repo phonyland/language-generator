@@ -322,7 +322,13 @@ class Generator
         ?int $numberOfSentences = null,
         null|string|array $sentenceEndingPunctuation = null,
     ): string {
-        return implode(' ', $this->sentences($numberOfSentences, $sentenceEndingPunctuation));
+        return implode(
+            separator: ' ',
+            array: $this->sentences(
+                numberOfSentences: $numberOfSentences,
+                endingPunctuation: $sentenceEndingPunctuation
+            )
+        );
     }
 
     /**
