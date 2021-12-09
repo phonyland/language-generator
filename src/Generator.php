@@ -125,7 +125,9 @@ class Generator
             );
 
             // Return null if there is no desired starting n-Gram
-            if (empty($foundNGrams)) { return null; }
+            if (empty($foundNGrams)) {
+                return null;
+            }
 
             $ngram = $foundNGrams[array_rand($foundNGrams)];
         }
