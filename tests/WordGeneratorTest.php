@@ -96,7 +96,20 @@ class WordGeneratorTest extends BaseTestCase
     }
 
     /** @test */
-    public function it_can_generate_a_word_that_starts_with_a_first_n_gram(): void
+    public function it_can_generate_a_word_for_a_sentence_position(): void
+    {
+        // Arrange
+        $ngramLenght = static::$generator->modelData['config']['n_gram_size'];
+        $position = random_int(1, static::$generator->modelData['config']['number_of_sentence_elements']);
+        $position = random_int(0, 1) === 1 ? $position : $position * -1;
+
+        // Act
+        $word = static::$generator->word(position: $position);
+
+        // Assert
+        $nGramOfWord = mb_substr($word, 0, $ngramLenght);
+        expect($nGramOfWord)->toBeIn(static::$generator->modelData['data']['sentence_elements'][$position]['e']);
+    }
     {
         // Act
         $word = static::$generator->word(
