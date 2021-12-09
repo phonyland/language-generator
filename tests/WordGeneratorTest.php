@@ -129,4 +129,23 @@ class WordGeneratorTest extends BaseTestCase
         // Assert
         expect($word)->toBeNull();
     }
+
+    /** @test */
+    public function it_can_generate_a_word_that_starts_with_a_desired_string_for_a_sentence_position(): void
+    {
+        $ngramLenght = static::$generator->modelData['config']['n_gram_size'];
+        $position = 1;
+
+        // Act
+        $word = static::$generator->word(
+            position: $position,
+            startsWith: 'si',
+        );
+
+        // Assert
+        $nGramOfWord = mb_substr($word, 0, $ngramLenght);
+        expect($nGramOfWord)
+            ->toStartWith('si')
+            ->toBeIn(static::$generator->modelData['data']['sentence_elements'][$position]['e']);
+    }
 }
