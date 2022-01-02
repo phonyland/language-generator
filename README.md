@@ -28,8 +28,8 @@ composer require phonyland/language-generator
 Start generating fake data with 🙃 Phony Framework,  
 visit the main **[Phony Repository](https://github.com/phonyland/framework)**.
 
-Explore the docs: **[phony.land »](https://phony.land/)**  
-Follow us on Twitter: **[@phony_land »](https://twitter.com/phony_land)**
+Explore the docs » **[https://phony.land](https://phony.land/)**  
+Follow us on Twitter » **[@phony_land](https://twitter.com/phony_land)**
 
 **[🙃 Phony<br/>Fake Data Generation Framework](https://phony.land)**  
 was created by  
