@@ -31,11 +31,11 @@
     },
     "config": {
         "allow-plugins": {
-            "phpstan/extension-installer": true,
             "ergebnis/composer-normalize": true,
+            "infection/extension-installer": true,
             "pestphp/pest-plugin": true,
-            "symfony/thanks": true,
-            "infection/extension-installer": true
+            "phpstan/extension-installer": true,
+            "symfony/thanks": true
         },
         "sort-packages": true
     },
