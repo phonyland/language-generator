@@ -26,7 +26,6 @@ class BaseTestCase extends TestCase
                 ->config
                 ->nGramSize(static::$n)
                 ->minWordLength(3)
-                ->unique(false)
                 ->excludeOriginals(true)
                 ->numberOfSentenceElements(3)
                 ->tokenizer(
