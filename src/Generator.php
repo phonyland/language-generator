@@ -266,9 +266,9 @@ class Generator
             );
         }
 
-        $words = implode(' ', array_merge($startingWords, $words, $endingWords)).$endingPunctuation;
+        $words = implode(' ', array_merge($startingWords, $words, $endingWords)) . $endingPunctuation;
 
-        return mb_strtoupper(mb_substr($words, 0, 1)).mb_substr($words, 1);
+        return mb_strtoupper(mb_substr($words, 0, 1)) . mb_substr($words, 1);
     }
 
     /**
@@ -403,7 +403,7 @@ class Generator
 
         return $suffix === null
             ? substr(implode(' ', $sentences), 0, $maxNumberOfCharacters)
-            : substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - mb_strlen($suffix)).$suffix;
+            : substr(implode(' ', $sentences), 0, $maxNumberOfCharacters - mb_strlen($suffix)) . $suffix;
     }
 
     /**

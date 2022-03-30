@@ -47,7 +47,7 @@ class PoemGeneratorTest extends BaseTestCase
             stanzaLength: $stanzaLenght,
         );
 
-        expect(explode(PHP_EOL.PHP_EOL, $poem))
+        expect(explode(PHP_EOL . PHP_EOL, $poem))
             ->toHaveCount($numberOfVerses / $stanzaLenght);
     }
 }

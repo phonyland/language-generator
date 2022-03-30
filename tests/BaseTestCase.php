@@ -36,7 +36,7 @@ class BaseTestCase extends TestCase
                         ->toLowercase()
                 );
 
-            $model->feed(file_get_contents(getcwd().'/tests/stubs/alice.txt'))
+            $model->feed(file_get_contents(getcwd() . '/tests/stubs/alice.txt'))
                   ->calculate();
 
             static::$generator = new Generator($model->toArray());
